@@ -1,2 +1,2 @@
-# calender
+# calendar
 Qt Project
