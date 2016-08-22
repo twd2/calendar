@@ -1,7 +1,7 @@
 QT += core gui widgets
 
 TEMPLATE = app
-TARGET = calender
+TARGET = calendar
 INCLUDEPATH += .
 
 # Input
