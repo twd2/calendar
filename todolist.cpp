@@ -74,7 +74,7 @@ void TodoList::refreshTodoTable()
     {
         const auto &item = list[i];
         table->setItem(i, 0, new QTableWidgetItem(item.matchToString()));
-        table->setItem(i, 1, new QTableWidgetItem(item.thing));
+        table->setItem(i, 1, new QTableWidgetItem(item.text));
         indexToID[i] = item.id;
     }
 }

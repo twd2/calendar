@@ -9,7 +9,7 @@ TodoItem::TodoItem()
       month(QDate::currentDate().month()),
       day(QDate::currentDate().day())
 {
-    thing = QDateTime::currentDateTime().toString();
+    text = QDateTime::currentDateTime().toString();
 }
 
 bool TodoItem::match(const QDate &date) const

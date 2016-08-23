@@ -7,6 +7,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
 
 class TodoEdit : public QDialog
 {
@@ -18,6 +20,9 @@ protected:
     QHBoxLayout *textboxLayout;
     QHBoxLayout *okLayout;
     QComboBox *yearBox, *monthBox, *dayBox, *dayOfWeekBox;
+    QLabel *labText;
+    QLineEdit *text;
+
 public:
     explicit TodoEdit(QWidget *parent = 0);
     TodoItem item();

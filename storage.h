@@ -12,6 +12,7 @@ private:
     QVector<TodoItem> _items;
     static Storage *instance;
 public:
+    const QString fileName = "calendar.json";
     Storage();
     static Storage *i();
     QVector<TodoItem> get(const QDate &date);
@@ -21,7 +22,8 @@ public:
     void set(int ID, const TodoItem &item);
     QString putFile(QString source);
     QString getFile(const QString &ID);
-    void Save();
+    void load();
+    void save();
     // QByteArray getFileData(const QString &ID);
 };
 

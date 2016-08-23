@@ -12,7 +12,7 @@ public:
     // -1 means to match all
     int id = 0;
     int year, month, day, dayOfWeek = -1;
-    QString thing;
+    QString text;
     QColor color = Qt::GlobalColor::white;
     TodoItem();
     bool match(const QDate &) const;

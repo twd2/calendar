@@ -386,7 +386,7 @@ void Calendar::updateTodo()
                 label->colorBackground = Qt::GlobalColor::yellow;
                 for (const TodoItem &i : list)
                 {
-                    strlist << i.thing;
+                    strlist << i.text;
                 }
             }
             label->setText(strlist.join("\n"));

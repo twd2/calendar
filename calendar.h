@@ -20,7 +20,7 @@ protected:
     QComboBox *yearBox, *monthBox;
     QDate selectedDate;
 public:
-    explicit Calendar(QWidget *parent = 0);
+    explicit Calendar(QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *);
