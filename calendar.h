@@ -3,14 +3,22 @@
 
 #include <QWidget>
 #include <QGridLayout>
-
+#include <QDate>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QComboBox>
 
 class Calendar : public QWidget
 {
     Q_OBJECT
 protected:
+    const int yearRange = 50; // -yearRange ~ +yearRange
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *controllers;
     QGridLayout *grid;
-    int year, month;
+    QDate _month;
+    QComboBox *yearBox, *monthBox;
+    QDate selectedDate;
 public:
     explicit Calendar(QWidget *parent = 0);
 
@@ -19,10 +27,15 @@ protected:
 signals:
 
 public slots:
-    void itemClicked(QWidget *);
+    void itemDoubleClicked(QWidget *);
     void itemSelected(QWidget *);
-    void setMonth(int year, int month);
+    void setMonth(const QDate &);
+    void setMonth(int);
+    void setYear(int);
+    void changeMonth(int);
+    void setSelected(const QDate &);
 private:
+    void initConrtollers();
     void initCalendar();
     QPoint lastPos, lastMousePos;
     bool isMousePressed = false;

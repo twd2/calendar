@@ -26,11 +26,13 @@ public slots:
     void setText(QString);
     void setDate(QDate);
     void setEnabled(bool);
-    void select();
-    void unselect();
+    void setSelected(bool);
 private:
     QString _text = "";
-    QColor _color = Qt::GlobalColor::red;
+    QColor _colorSelected = Qt::GlobalColor::gray;
+    QColor _colorWeekday = Qt::GlobalColor::black;
+    QColor _colorWeekend = Qt::GlobalColor::red;
+    QColor _colorDisabled = Qt::GlobalColor::gray;
     QDate _date;
     bool _enabled = true;
     bool _selected = false;

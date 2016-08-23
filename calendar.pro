@@ -21,5 +21,4 @@ HEADERS += \
     calendar.h \
     dateitem.h
 
-FORMS += \
-    todolist.ui
+FORMS +=

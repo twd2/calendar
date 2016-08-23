@@ -2,21 +2,30 @@
 #define TODOLIST_H
 
 #include <QDialog>
-
-namespace Ui {
-class TodoList;
-}
+#include <QDate>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QTableWidget>
+#include <QMap>
 
 class TodoList : public QDialog
 {
     Q_OBJECT
-
+protected:
+    QTableWidget *table;
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *controllers;
+    QHBoxLayout *okLayout;
 public:
-    explicit TodoList(QWidget *parent = 0);
+    const QDate date;
+    explicit TodoList(const QDate &date, QWidget *parent = nullptr);
     ~TodoList();
-
+public slots:
+    void add();
+    void del();
 private:
-    Ui::TodoList *ui;
+    QMap<int, int> indexToID;
+    void refreshTable();
 };
 
 #endif // TODOLIST_H

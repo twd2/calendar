@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     w->resize(screen.width() / 3, screen.height() / 3);
     w->show(); // */
     Calendar *c = new Calendar();
-    c->resize(screen.width() / 3, screen.height() / 3);
+    c->resize(screen.width() / 3, screen.height() / 2);
     c->show(); // */
 
     return app.exec();

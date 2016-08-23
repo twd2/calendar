@@ -10,9 +10,9 @@ DateItem::DateItem(QWidget *parent) : QWidget(parent)
 void DateItem::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
-    if (_selected)
+    if (_selected && _enabled)
     {
-        p.fillRect(this->rect(), _color);
+        p.fillRect(this->rect(), _colorSelected);
     }
     else
     {
@@ -21,11 +21,18 @@ void DateItem::paintEvent(QPaintEvent *e)
 
     if (_enabled)
     {
-        p.setPen(Qt::GlobalColor::blue);
+        if (_date.dayOfWeek() >= 1 && _date.dayOfWeek() <= 5)
+        {
+            p.setPen(_colorWeekday);
+        }
+        else
+        {
+            p.setPen(_colorWeekend);
+        }
     }
     else
     {
-        p.setPen(Qt::GlobalColor::gray);
+        p.setPen(_colorDisabled);
     }
     QFont f;
     f.setPixelSize(24);
@@ -54,7 +61,7 @@ void DateItem::mouseDoubleClickEvent(QMouseEvent *e)
 
 void DateItem::setColor(QColor color)
 {
-    this->_color = color;
+    this->_colorWeekday = color;
     update();
 }
 
@@ -72,7 +79,7 @@ void DateItem::setDate(QDate date)
 
 QColor DateItem::color()
 {
-    return _color;
+    return _colorWeekday;
 }
 
 QString DateItem::text()
@@ -101,14 +108,8 @@ bool DateItem::selected()
     return _selected;
 }
 
-void DateItem::select()
+void DateItem::setSelected(bool selected)
 {
-    _selected = true;
-    update();
-}
-
-void DateItem::unselect()
-{
-    _selected = false;
+    _selected = selected;
     update();
 }
