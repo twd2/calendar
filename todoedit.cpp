@@ -62,6 +62,15 @@ void TodoEdit::initControllers()
 
     _item.year = _item.month = _item.day = _item.dayOfWeek = -1;
 
+    labText = new QLabel(tr("Things To Do:"), this);
+    textboxLayout->addWidget(labText);
+    labText->show();
+
+    text = new QLineEdit(this);
+    textboxLayout->addWidget(text);
+    text->setText(_item.text);
+    text->show();
+
     QPushButton *btnCancel = new QPushButton(tr("Cancel"), this);
     btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(close()));
@@ -146,6 +155,7 @@ void TodoEdit::updateDays()
 
 void TodoEdit::ok()
 {
+    _item.text = text->text();
     // check day of week
     int year = yearBox->currentData().toInt(),
         month = monthBox->currentData().toInt(),
@@ -171,6 +181,17 @@ void TodoEdit::ok()
 void TodoEdit::setItem(TodoItem item)
 {
     _item = item;
+    text->setText(_item.text);
+
+    if (_item.day > 0)
+    {
+        dayBox->setCurrentIndex(_item.day);
+    }
+    else
+    {
+        dayBox->setCurrentIndex(0);
+    }
+
     if (_item.year > 0)
     {
         yearBox->setCurrentIndex(_item.year - 1999);
@@ -189,15 +210,6 @@ void TodoEdit::setItem(TodoItem item)
         monthBox->setCurrentIndex(0);
     }
 
-    if (_item.day > 0)
-    {
-        dayBox->setCurrentIndex(_item.day);
-    }
-    else
-    {
-        dayBox->setCurrentIndex(0);
-    }
-
     if (_item.dayOfWeek > 0)
     {
         dayOfWeekBox->setCurrentIndex(_item.dayOfWeek);
@@ -206,6 +218,7 @@ void TodoEdit::setItem(TodoItem item)
     {
         dayOfWeekBox->setCurrentIndex(0);
     }
+
     updateDays();
 }
 
