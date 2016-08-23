@@ -5,7 +5,6 @@
 #include <QTextCharFormat>
 #include <QDebug>
 #include <QtGlobal>
-#include <QCalendarModel>
 
 Calendar::Calendar(QWidget *parent)
     : QCalendarWidget(parent)
@@ -153,20 +152,4 @@ void Calendar::dropEvent(QDropEvent *e)
         qDebug() << url.toString();
     }
     qDebug() << mime->text();
-}
-
-QDate dateAt(const QPoint &p)
-{
-    QCalendarModel *calendarModel = ::qobject_cast<QCalendarModel *>(model());
-        if (!calendarModel)
-            return QDate();
-
-        QPoint pos = event->pos();
-        QModelIndex index = indexAt(pos);
-        QDate date = calendarModel->dateForCell(index.row(), index.column());
-        if (date.isValid() && date >= calendarModel->minimumDate
-                && date <= calendarModel->maximumDate) {
-            return date;
-        }
-        return QDate();
 }
