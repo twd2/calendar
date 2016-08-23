@@ -1,39 +1,51 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include <QCalendarWidget>
-#include <QPainter>
-#include <QColor>
+#include <QWidget>
+#include <QGridLayout>
 #include <QDate>
-#include <QPen>
-#include <QBrush>
-#include <QVector>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QComboBox>
 
-class Calendar : public QCalendarWidget
+class Calendar : public QWidget
 {
     Q_OBJECT
-public:
-    Calendar(QWidget *parent = nullptr);
-    ~Calendar();
-
-    void setColor(QColor &color);
-    QColor getColor();
 protected:
-    void paintCell(QPainter * painter, const QRect & rect, const QDate & date) const override;
+    const int yearRange = 50; // -yearRange ~ +yearRange
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *controllers;
+    QGridLayout *grid;
+    QDate _month;
+    QComboBox *yearBox, *monthBox;
+    QDate selectedDate;
+public:
+    explicit Calendar(QWidget *parent = 0);
 
-private slots:
-    void dateSelected(const QDate &);
+protected:
+    void paintEvent(QPaintEvent *);
+signals:
 
+public slots:
+    void itemDoubleClicked(QWidget *);
+    void itemSelected(QWidget *);
+    void setMonth(const QDate &);
+    void setMonth(int);
+    void setYear(int);
+    void changeMonth(int);
+    void setSelected(const QDate &);
 private:
+    void initConrtollers();
+    void initCalendar();
     QPoint lastPos, lastMousePos;
     bool isMousePressed = false;
     void mousePressEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
+
     void dragEnterEvent(QDragEnterEvent *) override;
     void dragMoveEvent(QDragMoveEvent *) override;
     void dropEvent(QDropEvent *) override;
-
 };
 
 #endif // CALENDAR_H

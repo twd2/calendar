@@ -5,18 +5,20 @@ TARGET = calendar
 INCLUDEPATH += .
 
 # Input
-SOURCES += main.cpp calendar.cpp \
+SOURCES += main.cpp \
     todolist.cpp \
     storage.cpp \
     todoitem.cpp \
-    widget.cpp
+    widget.cpp \
+    calendar.cpp \
+    dateitem.cpp
 
 HEADERS += \
-    calendar.h \
     todolist.h \
     storage.h \
     todoitem.h \
-    widget.h
+    widget.h \
+    calendar.h \
+    dateitem.h
 
-FORMS += \
-    todolist.ui
+FORMS +=

@@ -6,15 +6,15 @@
 #include <QObject>
 
 class TodoItem
-    : public QObject
 {
-    Q_OBJECT
 public:
     // -1 means to match all
-    int year, month, day, dayOfWeek;
+    int id = 0;
+    int year, month, day, dayOfWeek = -1;
+    QString thing;
     TodoItem();
-    bool match(QDate &);
-    QString matchToString();
+    bool match(const QDate &) const;
+    QString matchToString() const;
     ~TodoItem();
 };
 

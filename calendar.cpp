@@ -1,87 +1,259 @@
 #include "calendar.h"
+#include "dateitem.h"
+#include "todolist.h"
 
-#include <QtWidgets>
-#include <QInputDialog>
-#include <QTextCharFormat>
+#include <QLabel>
+#include <QSignalMapper>
 #include <QDebug>
-#include <QtGlobal>
+#include <QPainter>
+#include <QMouseEvent>
+#include <QMimeData>
+#include <QPushButton>
+#include <QApplication>
+#include <QDesktopWidget>
+
 
 Calendar::Calendar(QWidget *parent)
-    : QCalendarWidget(parent)
+    : QWidget(parent), mainLayout(new QVBoxLayout(this)),
+      controllers(new QHBoxLayout(this)), grid(new QGridLayout(this))
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
-    setWindowOpacity(0.7);
-    connect(this, SIGNAL(activated(QDate)), this, SLOT(dateSelected(QDate)));
-    // m_outlinePen.setColor(Qt::red);
-    // m_transparentBrush.setColor(Qt::transparent);
+    setWindowOpacity(1.0);
+    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    controllers->setSpacing(1);
+    controllers->setMargin(0);
+    grid->setSpacing(1);
+    grid->setMargin(0);
+    mainLayout->addLayout(controllers);
+    mainLayout->addLayout(grid);
+    mainLayout->setSpacing(1);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
+    initConrtollers();
+    initCalendar();
 }
 
-Calendar::~Calendar()
+void Calendar::initConrtollers()
 {
+    QSignalMapper *mapper = new QSignalMapper(this);
+    QPushButton *btnPrev = new QPushButton(tr("<< Previous month"), this);
+    mapper->setMapping(btnPrev, -1);
+    connect(btnPrev, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    btnPrev->show();
+    QPushButton *btnNext = new QPushButton(tr("Next month >>"), this);
+    mapper->setMapping(btnNext, +1);
+    connect(btnNext, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    btnNext->show();
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(changeMonth(int)));
 
+    controllers->addWidget(btnPrev);
+
+    yearBox = new QComboBox(this);
+    for (int i = 0; i < yearRange * 2 + 1; ++i)
+    {
+        yearBox->addItem("", 0);
+    }
+    connect(yearBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setYear(int)));
+    yearBox->show();
+    controllers->addWidget(yearBox);
+
+    monthBox = new QComboBox(this);
+    QString monthAbbr[] = {tr("Jan"), tr("Feb"), tr("Mar"), tr("Apr"),
+                           tr("May"), tr("Jun"), tr("Jul"), tr("Aug"),
+                           tr("Sept"), tr("Oct"), tr("Nov"), tr("Dec")};
+    for (int i = 0; i < 12; ++i)
+    {
+        monthBox->addItem(monthAbbr[i], i + 1);
+    }
+    connect(monthBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMonth(int)));
+    monthBox->show();
+    controllers->addWidget(monthBox);
+
+    controllers->addWidget(btnNext);
 }
 
-void Calendar::dateSelected(const QDate &date)
+void Calendar::initCalendar()
 {
-    qDebug() << date.toString() << endl;
-    /*QString memo = QInputDialog::getText( this,
-            "Memo", "Description:" );
-    QMessageBox(QMessageBox::Information, "calendar", memo).exec();
-    if( !memo.isEmpty() ){
-        QBrush brush;
-        brush.setColor(Qt::yellow);
+    // week
+    for (int y = 1; y <= 6; ++y)
+    {
+        QLabel *label = new QLabel("??", this);
+        label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+        label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        label->show();
+        grid->addWidget(label, y, 0);
+    }
 
-        QTextCharFormat cf = this->dateTextFormat(date);
-        cf.setBackground(brush);
-        this->setDateTextFormat(date, cf);
-        if(dates.contains(date))
+    // day of week
+    QString dayOfWeekAbbr[] = {tr("Sun"), tr("Mon"), tr("Tue"),
+                               tr("Wed"), tr("Thur"), tr("Fri"),
+                               tr("Sat")};
+    for (int x = 1; x <= 7; ++x)
+    {
+        QString c = (x == 1 || x == 7) ? "red" : "black";
+        QLabel *label = new QLabel("<font color=" + c + "><strong>" + dayOfWeekAbbr[x - 1] + "</strong></font>", this);
+        label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+        label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        label->show();
+        grid->addWidget(label, 0, x);
+    }
+
+    QLabel *label = new QLabel(tr("Wandai's<br>Calendar"), this);
+    label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+    label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    label->show();
+    grid->addWidget(label, 0, 0);
+
+    QSignalMapper *mapperClicked = new QSignalMapper(this);
+    QSignalMapper *mapperSelected = new QSignalMapper(this);
+    for (int y = 1; y <= 6; ++y)
+    {
+        for (int x = 1; x <= 7; ++x)
         {
-            int index = dates.indexOf(date);
-            todolist.replace(index, memo);
+            DateItem *label = new DateItem(this);
+            //label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
+            connect(label, SIGNAL(doubleClicked()), mapperClicked, SLOT(map()));
+            mapperClicked->setMapping(label, label);
+            connect(label, SIGNAL(clicked()), mapperSelected, SLOT(map()));
+            mapperSelected->setMapping(label, label);
+            label->show();
+            grid->addWidget(label, y, x);
         }
-        else
+    }
+    connect(mapperClicked, SIGNAL(mapped(QWidget *)), this, SLOT(itemDoubleClicked(QWidget *)));
+    connect(mapperSelected, SIGNAL(mapped(QWidget *)), this, SLOT(itemSelected(QWidget *)));
+
+    QDate now = QDate::currentDate();
+    setMonth(now);
+    setSelected(now);
+}
+
+void Calendar::itemDoubleClicked(QWidget *w)
+{
+    auto label = static_cast<DateItem *>(w);
+    if (!label)
+    {
+        return;
+    }
+    qDebug() << label->date() << "double clicked";
+    TodoList *list = new TodoList(label->date(), this);
+    QDesktopWidget *desktop = QApplication::desktop();
+    QRect screen = desktop->screenGeometry();
+    list->resize(screen.width() / 2, screen.height() / 2);
+    list->exec();
+}
+
+void Calendar::itemSelected(QWidget *w)
+{
+
+    auto label = static_cast<DateItem *>(w);
+    if (!label)
+    {
+        return;
+    }
+    qDebug() << label->date() << "selected";
+    setSelected(label->date());
+    if (label->date().month() != _month.month())
+    {
+        setMonth(label->date());
+    }
+}
+
+void Calendar::changeMonth(int delta)
+{
+    setMonth(_month.addMonths(delta));
+}
+
+void Calendar::setSelected(const QDate &date)
+{
+    for (int y = 1; y <= 6; ++y)
+    {
+        for (int x = 1; x <= 7; ++x)
         {
-            dates.append(date);
-            todolist.append(memo);
+            auto i = static_cast<DateItem *>(grid->itemAtPosition(y, x)->widget());
+            i->setSelected(i->date() == date);
         }
-    }*/
-
+    }
+    selectedDate = date;
 }
 
-void Calendar::setColor(QColor& color)
+void Calendar::setMonth(const QDate &month)
 {
-   // m_outlinePen.setColor(color);
+    if (_month.year() == month.year()
+        && _month.month() == month.month())
+    {
+        return;
+    }
+
+    _month = QDate(month.year(), month.month(), 1);
+    monthBox->setCurrentIndex(_month.month() - 1);
+
+    // update year box
+    for (int i = 0; i < yearRange * 2 + 1; ++i)
+    {
+        int year = _month.year() + i - yearRange;
+        yearBox->setItemText(i, QString::number(year));
+        yearBox->setItemData(i, year);
+    }
+    yearBox->setCurrentIndex(yearRange);
+
+    // update dateitems
+    QDate firstDay = _month.addDays(-(_month.dayOfWeek() % 7));
+    for (int y = 1; y <= 6; ++y)
+    {
+        for (int x = 1; x <= 7; ++x)
+        {
+            auto label = static_cast<DateItem *>(grid->itemAtPosition(y, x)->widget());
+            Q_ASSERT(label != nullptr);
+            QDate date = firstDay.addDays((y - 1) * 7 + x - 1);
+            label->setDate(date);
+            label->setEnabled(date.month() == _month.month());
+        }
+    }
+
+    // update week numbers
+    for (int y = 1; y <= 6; ++y)
+    {
+        auto label = static_cast<QLabel *>(grid->itemAtPosition(y, 0)->widget());
+        Q_ASSERT(label != nullptr);
+        label->setText("<font color=red><strong>" + QString::number(_month.weekNumber() + y - 1) + "</strong></font>");
+    }
+
+    // update selected
+    setSelected(selectedDate);
 }
 
-QColor Calendar::getColor()
+void Calendar::setMonth(int index)
 {
-    return Qt::GlobalColor::black;
-   // return (m_outlinePen.color());
+    if (index < 0)
+    {
+        return;
+    }
+    setMonth(QDate(_month.year(), monthBox->itemData(index).toInt(), 1));
 }
 
-void Calendar::paintCell(QPainter *painter, const QRect &rect, const QDate &date) const
+void Calendar::setYear(int index)
 {
-   //qDebug()<<"come in paintCell"<<endl;
-   QCalendarWidget::paintCell(painter, rect, date);
+    if (index < 0)
+    {
+        return;
+    }
+    setMonth(QDate(yearBox->itemData(index).toInt(), _month.month(), 1));
+}
 
-   /*Q_ASSERT(dates.size()==todolist.size());
-   for (int i = 0; i < dates.size(); i++)
-   {
-       if (date == dates.at(i))
-       {
-           painter->setPen(m_outlinePen);
-           painter->setBrush(m_transparentBrush);
-           painter->drawRect(rect.adjusted(0, 0, -1, -1));
-           painter->drawText(rect,todolist.at(i));
-       }
-   }*/
+void Calendar::paintEvent(QPaintEvent *)
+{
+    QPainter p(this);
+    p.fillRect(rect(), Qt::GlobalColor::cyan);
 }
 
 void Calendar::mousePressEvent(QMouseEvent *e)
 {
-    auto ch = childAt(e->pos());
-    qDebug() << ch->metaObject()->className();
+    if (e->button() != Qt::LeftButton)
+    {
+        return;
+    }
     isMousePressed = true;
     lastMousePos = e->globalPos();
     lastPos = pos();
@@ -93,6 +265,10 @@ void Calendar::mouseMoveEvent(QMouseEvent *e)
     {
         this->move(lastPos + e->globalPos() - lastMousePos);
     }
+    else
+    {
+        e->ignore();
+    }
 }
 
 void Calendar::mouseReleaseEvent(QMouseEvent *e)
@@ -103,7 +279,7 @@ void Calendar::mouseReleaseEvent(QMouseEvent *e)
 void Calendar::dragEnterEvent(QDragEnterEvent *e)
 {
     const QMimeData *mime = e->mimeData();
-    if (mime->hasUrls() || mime->hasText())
+    if (mime->hasUrls())
     {
         e->accept();
     }
@@ -116,7 +292,7 @@ void Calendar::dragEnterEvent(QDragEnterEvent *e)
 void Calendar::dragMoveEvent(QDragMoveEvent *e)
 {
     const QMimeData *mime = e->mimeData();
-    if (mime->hasUrls() || mime->hasText())
+    if (mime->hasUrls())
     {
         e->accept();
     }
@@ -124,16 +300,27 @@ void Calendar::dragMoveEvent(QDragMoveEvent *e)
     {
         e->ignore();
     }
+    auto label = static_cast<DateItem *>(childAt(e->pos()));
+    if (!label || !label->enabled())
+    {
+        e->setDropAction(Qt::IgnoreAction);
+        itemSelected(nullptr);
+    }
+    else
+    {
+        e->setDropAction(Qt::CopyAction);
+        itemSelected(label);
+    }
 }
 
 void Calendar::dropEvent(QDropEvent *e)
 {
     const QMimeData *mime = e->mimeData();
-    if (mime->hasUrls() || mime->hasText())
+    if (mime->hasUrls())
     {
         if (e->source() == this)
         {
-            e->setDropAction(Qt::MoveAction);
+            e->setDropAction(Qt::CopyAction);
             e->accept();
         }
         else
@@ -146,10 +333,16 @@ void Calendar::dropEvent(QDropEvent *e)
         e->ignore();
         return;
     }
+    auto label = static_cast<DateItem *>(childAt(e->pos()));
+    if (!label || !label->enabled())
+    {
+        return;
+    }
+    label->setColor(Qt::GlobalColor::cyan);
     const QList<QUrl> &urls = mime->urls();
+    qDebug() << label->date() << "dropped";
     for (const auto &url : urls)
     {
         qDebug() << url.toString();
     }
-    qDebug() << mime->text();
 }
