@@ -16,7 +16,7 @@ void DateItem::paintEvent(QPaintEvent *e)
     }
     else
     {
-        p.fillRect(this->rect(), Qt::GlobalColor::white);
+        p.fillRect(this->rect(), colorBackground);
     }
 
     if (_enabled)
@@ -35,10 +35,10 @@ void DateItem::paintEvent(QPaintEvent *e)
         p.setPen(_colorDisabled);
     }
     QFont f;
-    f.setPixelSize(24);
+    f.setPixelSize(13);
     p.setFont(f);
     p.drawText(rect(), Qt::AlignCenter, QString::number(_date.day()));
-    f.setPixelSize(15);
+    f.setPixelSize(13);
     p.setFont(f);
     p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
 }

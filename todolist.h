@@ -23,9 +23,11 @@ public:
 public slots:
     void add();
     void del();
+    void edit(int);
 private:
     QMap<int, int> indexToID;
-    void refreshTable();
+    void initControllers();
+    void refreshTodoTable();
 };
 
 #endif // TODOLIST_H

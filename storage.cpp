@@ -47,3 +47,13 @@ QVector<TodoItem> Storage::get(const QDate &date)
     }
     return items;
 }
+
+TodoItem Storage::get(int ID)
+{
+    return _items[ID];
+}
+
+void Storage::set(int ID, const TodoItem &item)
+{
+    _items[ID] = item;
+}

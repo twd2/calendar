@@ -1,4 +1,5 @@
 #include "todoitem.h"
+#include "global.h"
 
 #include <QStringList>
 #include <QDate>
@@ -21,12 +22,6 @@ bool TodoItem::match(const QDate &date) const
 
 QString TodoItem::matchToString() const
 {
-    QString monthString[] = {QObject::tr("January"), QObject::tr("February"), QObject::tr("March"), QObject::tr("April"),
-                             QObject::tr("May"), QObject::tr("June"), QObject::tr("July"), QObject::tr("August"),
-                             QObject::tr("September"), QObject::tr("October"), QObject::tr("November"), QObject::tr("December")};
-    QString dayOfWeekString[] = {QObject::tr("Monday"), QObject::tr("Tuesday"), QObject::tr("Wednesday"),
-                                 QObject::tr("Thursday"), QObject::tr("Friday"), QObject::tr("Saturday"),
-                                 QObject::tr("Sunday")};
     QStringList list;
     if (year == -1)
     {
@@ -43,7 +38,7 @@ QString TodoItem::matchToString() const
     }
     else
     {
-        list << monthString[month - 1];
+        list << Global::monthString[month - 1];
     }
 
     if (day == -1)
@@ -57,7 +52,7 @@ QString TodoItem::matchToString() const
 
     if (dayOfWeek != -1)
     {
-        list << QObject::tr("only %1").arg(dayOfWeekString[dayOfWeek - 1]);
+        list << QObject::tr("only %1").arg(Global::dayOfWeekString[dayOfWeek - 1]);
     }
     return list.join(QObject::tr(", "));
 }

@@ -4,6 +4,7 @@
 #include <QDate>
 #include <QString>
 #include <QObject>
+#include <QColor>
 
 class TodoItem
 {
@@ -12,6 +13,7 @@ public:
     int id = 0;
     int year, month, day, dayOfWeek = -1;
     QString thing;
+    QColor color = Qt::GlobalColor::white;
     TodoItem();
     bool match(const QDate &) const;
     QString matchToString() const;

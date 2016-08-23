@@ -8,6 +8,7 @@ class DateItem : public QWidget
 {
     Q_OBJECT
 public:
+    QColor colorBackground = Qt::GlobalColor::white;
     explicit DateItem(QWidget *parent = 0);
     QColor color();
     QString text();

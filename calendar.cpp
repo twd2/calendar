@@ -1,7 +1,11 @@
 #include "calendar.h"
 #include "dateitem.h"
+#include "todoitem.h"
 #include "todolist.h"
+#include "global.h"
+#include "storage.h"
 
+#include <QVector>
 #include <QLabel>
 #include <QSignalMapper>
 #include <QDebug>
@@ -15,12 +19,19 @@
 
 Calendar::Calendar(QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
-      controllers(new QHBoxLayout(this)), grid(new QGridLayout(this))
+      controllers(new QHBoxLayout()), grid(new QGridLayout())
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
     setWindowOpacity(1.0);
     setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+    // set background color
+    QPalette pal(palette());
+    pal.setColor(QPalette::Background, Qt::GlobalColor::lightGray);
+    setAutoFillBackground(true);
+    setPalette(pal);
+
     controllers->setSpacing(1);
     controllers->setMargin(0);
     grid->setSpacing(1);
@@ -59,12 +70,9 @@ void Calendar::initConrtollers()
     controllers->addWidget(yearBox);
 
     monthBox = new QComboBox(this);
-    QString monthAbbr[] = {tr("Jan"), tr("Feb"), tr("Mar"), tr("Apr"),
-                           tr("May"), tr("Jun"), tr("Jul"), tr("Aug"),
-                           tr("Sept"), tr("Oct"), tr("Nov"), tr("Dec")};
     for (int i = 0; i < 12; ++i)
     {
-        monthBox->addItem(monthAbbr[i], i + 1);
+        monthBox->addItem(Global::monthAbbr[i], i + 1);
     }
     connect(monthBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMonth(int)));
     monthBox->show();
@@ -81,18 +89,16 @@ void Calendar::initCalendar()
         QLabel *label = new QLabel("??", this);
         label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
         label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        label->setAttribute(Qt::WA_TranslucentBackground, true);
         label->show();
         grid->addWidget(label, y, 0);
     }
 
     // day of week
-    QString dayOfWeekAbbr[] = {tr("Sun"), tr("Mon"), tr("Tue"),
-                               tr("Wed"), tr("Thur"), tr("Fri"),
-                               tr("Sat")};
     for (int x = 1; x <= 7; ++x)
     {
         QString c = (x == 1 || x == 7) ? "red" : "black";
-        QLabel *label = new QLabel("<font color=" + c + "><strong>" + dayOfWeekAbbr[x - 1] + "</strong></font>", this);
+        QLabel *label = new QLabel("<font color=" + c + "><strong>" + Global::dayOfWeekAbbr[x - 1] + "</strong></font>", this);
         label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
         label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
         label->show();
@@ -142,6 +148,7 @@ void Calendar::itemDoubleClicked(QWidget *w)
     QRect screen = desktop->screenGeometry();
     list->resize(screen.width() / 2, screen.height() / 2);
     list->exec();
+    updateTodo();
 }
 
 void Calendar::itemSelected(QWidget *w)
@@ -220,6 +227,8 @@ void Calendar::setMonth(const QDate &month)
         label->setText("<font color=red><strong>" + QString::number(_month.weekNumber() + y - 1) + "</strong></font>");
     }
 
+
+    updateTodo();
     // update selected
     setSelected(selectedDate);
 }
@@ -244,8 +253,19 @@ void Calendar::setYear(int index)
 
 void Calendar::paintEvent(QPaintEvent *)
 {
-    QPainter p(this);
-    p.fillRect(rect(), Qt::GlobalColor::cyan);
+
+}
+
+void Calendar::resizeEvent(QResizeEvent *)
+{
+//    QPainterPath path;
+//    //QRectF rect = QRectF(0,0,200,100);
+//    path.addRoundRect(rect(), 5, 5);
+//    QPolygon polygon = path.toFillPolygon().toPolygon();
+//    //获得这个路径上的所有的点
+//    QRegion region(polygon);
+//    //根据这个点构造这个区域
+//    setMask(region);
 }
 
 void Calendar::mousePressEvent(QMouseEvent *e)
@@ -344,5 +364,33 @@ void Calendar::dropEvent(QDropEvent *e)
     for (const auto &url : urls)
     {
         qDebug() << url.toString();
+    }
+}
+
+void Calendar::updateTodo()
+{
+    for (int y = 1; y <= 6; ++y)
+    {
+        for (int x = 1; x <= 7; ++x)
+        {
+            auto label = static_cast<DateItem *>(grid->itemAtPosition(y, x)->widget());
+            Q_ASSERT(label != nullptr);
+            auto list = Storage::i()->get(label->date());
+            QStringList strlist;
+            if (list.count() == 0)
+            {
+                label->colorBackground = Qt::GlobalColor::white;
+            }
+            else
+            {
+                label->colorBackground = Qt::GlobalColor::yellow;
+                for (const TodoItem &i : list)
+                {
+                    strlist << i.thing;
+                }
+            }
+            label->setText(strlist.join("\n"));
+            label->update();
+        }
     }
 }

@@ -24,6 +24,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
+    void resizeEvent(QResizeEvent *);
 signals:
 
 public slots:
@@ -34,6 +35,7 @@ public slots:
     void setYear(int);
     void changeMonth(int);
     void setSelected(const QDate &);
+    void updateTodo();
 private:
     void initConrtollers();
     void initCalendar();

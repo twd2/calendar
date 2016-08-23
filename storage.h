@@ -17,6 +17,8 @@ public:
     QVector<TodoItem> get(const QDate &date);
     int add(TodoItem item);
     void del(int ID);
+    TodoItem get(int ID);
+    void set(int ID, const TodoItem &item);
     QString putFile(QString source);
     QString getFile(const QString &ID);
     void Save();
