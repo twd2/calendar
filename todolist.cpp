@@ -2,6 +2,7 @@
 #include "todoitem.h"
 #include "todoedit.h"
 #include "storage.h"
+#include "global.h"
 
 #include <QPushButton>
 #include <QSpacerItem>
@@ -99,7 +100,9 @@ void TodoList::refreshItems()
         QTableWidgetItem *onItem = new QTableWidgetItem(item.matchToString()),
                          *textItem = new QTableWidgetItem(item.text);
         onItem->setBackgroundColor(item.color);
+        onItem->setTextColor(Global::getTextColor(item.color));
         textItem->setBackgroundColor(item.color);
+        textItem->setTextColor(Global::getTextColor(item.color));
         table->setItem(i, 0, onItem);
         table->setItem(i, 1, textItem);
 
@@ -107,9 +110,12 @@ void TodoList::refreshItems()
     }
 
     // list
+    files = Storage::i()->getFileList(date);
     fileList->clear();
-    fileList->addItem("123");
-    fileList->addItem("456");
+    for (FileInfo fi : files)
+    {
+        fileList->addItem(fi.fileName);
+    }
 }
 
 void TodoList::add()

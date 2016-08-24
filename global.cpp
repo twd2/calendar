@@ -15,7 +15,28 @@ QString Global::dayOfWeekString[] = {QObject::tr("Monday"), QObject::tr("Tuesday
                                      QObject::tr("Thursday"), QObject::tr("Friday"), QObject::tr("Saturday"),
                                      QObject::tr("Sunday")};
 
-Global::Global()
+QString Global::getTextColorName(QColor backgroundColor)
 {
+    int r, g, b;
+    backgroundColor.getRgb(&r, &g, &b);
+    double gray = r * 0.299 + g * 0.587 + b * 0.114;
+    QString textColor = "black";
+    if (gray < 128)
+    {
+        textColor = "white";
+    }
+    return textColor;
+}
 
+QColor Global::getTextColor(QColor backgroundColor)
+{
+    int r, g, b;
+    backgroundColor.getRgb(&r, &g, &b);
+    double gray = r * 0.299 + g * 0.587 + b * 0.114;
+    QColor textColor = Qt::GlobalColor::black;
+    if (gray < 128)
+    {
+        textColor = Qt::GlobalColor::white;
+    }
+    return textColor;
 }

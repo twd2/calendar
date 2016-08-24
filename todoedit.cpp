@@ -252,11 +252,6 @@ void TodoEdit::updateColor()
 {
     int r, g, b;
     _item.color.getRgb(&r, &g, &b);
-    double gray = r * 0.299 + g * 0.587 + b * 0.114;
-    QString textColor = "black";
-    if (gray < 128)
-    {
-        textColor = "white";
-    }
-    btnColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);color: %4;").arg(r).arg(g).arg(b).arg(textColor));
+    btnColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);color: %4;").arg(r).arg(g).arg(b)
+                                                                                   .arg(Global::getTextColorName(_item.color)));
 }

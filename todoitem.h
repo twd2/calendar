@@ -17,6 +17,7 @@ public:
     TodoItem();
     explicit TodoItem(const QDate &);
     bool match(const QDate &) const;
+    bool fullMatch(const QDate &) const;
     QString matchToString() const;
     ~TodoItem();
 };

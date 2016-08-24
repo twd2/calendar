@@ -26,6 +26,13 @@ bool TodoItem::match(const QDate &date) const
            && (dayOfWeek == -1 || dayOfWeek == date.dayOfWeek());
 }
 
+bool TodoItem::fullMatch(const QDate &date) const
+{
+    return year == date.year()
+           && month == date.month()
+           && day == date.day();
+}
+
 QString TodoItem::matchToString() const
 {
     QStringList list;

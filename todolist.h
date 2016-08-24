@@ -1,6 +1,8 @@
 #ifndef TODOLIST_H
 #define TODOLIST_H
 
+#include "fileinfo.h"
+
 #include <QDialog>
 #include <QDate>
 #include <QVBoxLayout>
@@ -9,6 +11,7 @@
 #include <QListWidget>
 #include <QMap>
 #include <QMouseEvent>
+#include <QVector>
 
 class TodoList : public QDialog
 {
@@ -31,6 +34,7 @@ public slots:
     void edit(int);
 private:
     QMap<int, int> indexToID;
+    QVector<FileInfo> files;
     void initControllers();
     void refreshItems();
 };

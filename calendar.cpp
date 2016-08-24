@@ -157,8 +157,10 @@ void Calendar::itemSelected(QWidget *w)
     auto label = static_cast<DateItem *>(w);
     if (!label)
     {
+        setSelected(QDate());
         return;
     }
+
     qDebug() << label->date() << "selected";
     setSelected(label->date());
     if (label->date().month() != _month.month())
@@ -364,7 +366,9 @@ void Calendar::dropEvent(QDropEvent *e)
     for (const auto &url : urls)
     {
         qDebug() << url.toString();
+        Storage::i()->putFile(url.path(), label->date());
     }
+    updateTodo();
 }
 
 void Calendar::updateTodo()
@@ -379,15 +383,24 @@ void Calendar::updateTodo()
             QStringList strlist;
             if (list.count() == 0)
             {
-                label->colorBackground = Qt::GlobalColor::white;
+                label->setBackgroundColor(Qt::GlobalColor::white);
             }
             else
             {
-                label->colorBackground = Qt::GlobalColor::yellow;
+                 label->setBackgroundColor(Qt::GlobalColor::white);
                 for (const TodoItem &i : list)
                 {
                     strlist << i.text;
+                    if (i.fullMatch(label->date()))
+                    {
+                         label->setBackgroundColor(i.color);
+                    }
                 }
+            }
+            int fileCount = Storage::i()->getFileCount(label->date());
+            if (fileCount > 0)
+            {
+                strlist.append(tr("%1 file(s)").arg(fileCount));
             }
             label->setText(strlist.join("\n"));
             label->update();

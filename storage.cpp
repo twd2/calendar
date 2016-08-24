@@ -5,6 +5,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QFile>
+#include <QDir>
+#include <QDebug>
 
 Storage *Storage::instance = nullptr;
 const QString Storage::defaultFileName = "calendar.json";
@@ -134,4 +136,73 @@ void Storage::save(const QString &fileName)
     QFile file(fileName);
     file.open(QFile::WriteOnly);
     file.write(doc.toJson());
+}
+
+FileInfo Storage::putFile(const QString &source, const QDate &date)
+{
+    QDir dir(date.toString("yyyyMMdd"));
+    QFileInfo file(source);
+    FileInfo fi;
+    fi.fileName = file.fileName();
+    fi.id = dir.filePath(fi.fileName);
+    // TODO progress callback
+    if (!dir.exists())
+    {
+        QDir().mkdir(dir.dirName());
+    }
+    qDebug() << "Copying" << file.absoluteFilePath() << "to" << fi.id;
+    QFile::copy(file.absoluteFilePath(), fi.id);
+    return fi;
+}
+
+QVector<FileInfo> Storage::getFileList(const QDate &date)
+{
+    QVector<FileInfo> fileInfos;
+    QDir dir(date.toString("yyyyMMdd"));
+    if (!dir.exists())
+    {
+        return fileInfos;
+    }
+    for (QFileInfo file : dir.entryInfoList())
+    {
+        if (file.isFile() && !file.isHidden())
+        {
+            FileInfo fi;
+            fi.fileName = file.fileName();
+            fi.id = dir.filePath(fi.fileName);
+            fileInfos.append(fi);
+        }
+    }
+    return fileInfos;
+}
+
+int Storage::getFileCount(const QDate &date)
+{
+    QDir dir(date.toString("yyyyMMdd"));
+    if (!dir.exists())
+    {
+        return 0;
+    }
+    int count = 0;
+    for (QFileInfo file : dir.entryInfoList())
+    {
+        if (file.isFile() && !file.isHidden())
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+QString Storage::getFilePath(const QString &id)
+{
+    // when we use filesystem rather than database to store user's files, id is actually the sub path.
+    return QFileInfo(id).absoluteFilePath();
+}
+
+QByteArray Storage::getFileData(const QString &id)
+{
+    QFile file(id);
+    file.open(QFile::ReadOnly);
+    return file.readAll();
 }

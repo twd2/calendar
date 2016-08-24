@@ -1,4 +1,6 @@
 #include "dateitem.h"
+#include "global.h"
+
 #include <QPaintEvent>
 #include <QPainter>
 
@@ -10,29 +12,22 @@ DateItem::DateItem(QWidget *parent) : QWidget(parent)
 void DateItem::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
-    if (_selected && _enabled)
-    {
-        p.fillRect(this->rect(), _colorSelected);
-    }
-    else
-    {
-        p.fillRect(this->rect(), colorBackground);
-    }
+    p.fillRect(this->rect(), colorBackground);
 
     if (_enabled)
     {
         if (_date.dayOfWeek() >= 1 && _date.dayOfWeek() <= 5)
         {
-            p.setPen(_colorWeekday);
+            p.setPen(_colorWeekdayText);
         }
         else
         {
-            p.setPen(_colorWeekend);
+            p.setPen(_colorWeekendText);
         }
     }
     else
     {
-        p.setPen(_colorDisabled);
+        p.setPen(_colorDisabledText);
     }
     QFont f;
     f.setPixelSize(13);
@@ -41,6 +36,11 @@ void DateItem::paintEvent(QPaintEvent *e)
     f.setPixelSize(13);
     p.setFont(f);
     p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
+
+    if (_selected && _enabled)
+    {
+        p.fillRect(this->rect(), QColor::fromRgba64(0, 0, 0, 16384));
+    }
 }
 
 void DateItem::mouseReleaseEvent(QMouseEvent *e)
@@ -61,7 +61,7 @@ void DateItem::mouseDoubleClickEvent(QMouseEvent *e)
 
 void DateItem::setColor(QColor color)
 {
-    this->_colorWeekday = color;
+    this->_colorWeekdayText = color;
     update();
 }
 
@@ -79,7 +79,7 @@ void DateItem::setDate(QDate date)
 
 QColor DateItem::color()
 {
-    return _colorWeekday;
+    return _colorWeekdayText;
 }
 
 QString DateItem::text()
@@ -112,4 +112,10 @@ void DateItem::setSelected(bool selected)
 {
     _selected = selected;
     update();
+}
+
+void DateItem::setBackgroundColor(QColor color)
+{
+    this->colorBackground = color;
+    this->_colorWeekdayText = Global::getTextColor(color);
 }

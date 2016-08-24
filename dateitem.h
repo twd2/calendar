@@ -8,13 +8,13 @@ class DateItem : public QWidget
 {
     Q_OBJECT
 public:
-    QColor colorBackground = Qt::GlobalColor::white;
     explicit DateItem(QWidget *parent = 0);
     QColor color();
     QString text();
     QDate date();
     bool enabled();
     bool selected();
+    void setBackgroundColor(QColor);
 protected:
     void paintEvent(QPaintEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
@@ -30,10 +30,10 @@ public slots:
     void setSelected(bool);
 private:
     QString _text = "";
-    QColor _colorSelected = Qt::GlobalColor::gray;
-    QColor _colorWeekday = Qt::GlobalColor::black;
-    QColor _colorWeekend = Qt::GlobalColor::red;
-    QColor _colorDisabled = Qt::GlobalColor::gray;
+    QColor colorBackground = Qt::GlobalColor::white;
+    QColor _colorWeekdayText = Qt::GlobalColor::black;
+    QColor _colorWeekendText = Qt::GlobalColor::red;
+    QColor _colorDisabledText = Qt::GlobalColor::gray;
     QDate _date;
     bool _enabled = true;
     bool _selected = false;

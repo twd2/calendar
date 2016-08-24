@@ -2,6 +2,7 @@
 #define STORAGE_H
 
 #include "todoitem.h"
+#include "fileinfo.h"
 
 #include <QVector>
 #include <QString>
@@ -20,9 +21,10 @@ public:
     void del(int id);
     TodoItem get(int id);
     void set(int id, const TodoItem &item);
-    QString putFile(const QString &source, const QDate &date);
-    QVector<QString> getFileList(const QDate &date);
-    // QString getFile(const QString &id);
+    FileInfo putFile(const QString &source, const QDate &date);
+    QVector<FileInfo> getFileList(const QDate &date);
+    int getFileCount(const QDate &date);
+    QString getFilePath(const QString &id);
     QByteArray getFileData(const QString &id);
     void load();
     void save();
