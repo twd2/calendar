@@ -3,6 +3,7 @@
 
 #include "widget.h"
 #include "storage.h"
+#include "draggablelabel.h"
 
 int main(int argc, char **argv)
 {

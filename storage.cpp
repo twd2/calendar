@@ -206,3 +206,8 @@ QByteArray Storage::getFileData(const QString &id)
     file.open(QFile::ReadOnly);
     return file.readAll();
 }
+
+void Storage::delFile(const QString &id)
+{
+    QFile::remove(getFilePath(id));
+}

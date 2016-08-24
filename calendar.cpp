@@ -19,7 +19,7 @@
 
 Calendar::Calendar(QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
-      controllers(new QHBoxLayout()), grid(new QGridLayout())
+      controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
@@ -60,6 +60,16 @@ void Calendar::initConrtollers()
 
     controllers->addWidget(btnPrev);
 
+    QPushButton *btnImport = new QPushButton(tr("Import"), this);
+    // connect(btnImport, SIGNAL(clicked(bool)), this, SLOT(/*TODO*/()));
+    btnImport->show();
+    controllers->addWidget(btnImport);
+
+    QPushButton *btnExport = new QPushButton(tr("Export"), this);
+    // connect(btnExport, SIGNAL(clicked(bool)), this, SLOT(/*TODO*/()));
+    btnExport->show();
+    controllers->addWidget(btnExport);
+
     yearBox = new QComboBox(this);
     for (int i = 0; i < yearRange * 2 + 1; ++i)
     {
@@ -77,6 +87,11 @@ void Calendar::initConrtollers()
     connect(monthBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMonth(int)));
     monthBox->show();
     controllers->addWidget(monthBox);
+
+    QPushButton *btnToday = new QPushButton(tr("Today"), this);
+    connect(btnToday, SIGNAL(clicked(bool)), this, SLOT(setToday()));
+    btnToday->show();
+    controllers->addWidget(btnToday);
 
     controllers->addWidget(btnNext);
 }
@@ -105,11 +120,24 @@ void Calendar::initCalendar()
         grid->addWidget(label, 0, x);
     }
 
-    QLabel *label = new QLabel(tr("Wandai's<br>Calendar"), this);
+    /*QLabel *label = new QLabel(tr("Wandai's<br>Calendar"), this);
     label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
     label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    label->show();
-    grid->addWidget(label, 0, 0);
+    label->show();*/
+
+    // TODO user setting for these:
+    movable = new QPushButton(tr("Movable"), this);
+    movable->setCheckable(true);
+    movable->setChecked(true);
+    movable->show();
+    settingLayout->addWidget(movable);
+    acceptDnD = new QPushButton(tr("DnD"), this);
+    acceptDnD->setCheckable(true);
+    acceptDnD->setChecked(true);
+    acceptDnD->show();
+    settingLayout->addWidget(acceptDnD);
+    grid->addLayout(settingLayout, 0, 0);
+    // grid->addWidget(label, 0, 0);
 
     QSignalMapper *mapperClicked = new QSignalMapper(this);
     QSignalMapper *mapperSelected = new QSignalMapper(this);
@@ -148,6 +176,7 @@ void Calendar::itemDoubleClicked(QWidget *w)
     QRect screen = desktop->screenGeometry();
     list->resize(screen.width() / 2, screen.height() / 2);
     list->exec();
+    delete list;
     updateTodo();
 }
 
@@ -276,6 +305,10 @@ void Calendar::mousePressEvent(QMouseEvent *e)
     {
         return;
     }
+    if (!movable->isChecked())
+    {
+        return;
+    }
     isMousePressed = true;
     lastMousePos = e->globalPos();
     lastPos = pos();
@@ -287,19 +320,21 @@ void Calendar::mouseMoveEvent(QMouseEvent *e)
     {
         this->move(lastPos + e->globalPos() - lastMousePos);
     }
-    else
-    {
-        e->ignore();
-    }
 }
 
 void Calendar::mouseReleaseEvent(QMouseEvent *e)
 {
+    qDebug() << "mouseReleaseEvent";
     isMousePressed = false;
 }
 
 void Calendar::dragEnterEvent(QDragEnterEvent *e)
 {
+    if (!acceptDnD->isChecked())
+    {
+        e->ignore();
+        return;
+    }
     const QMimeData *mime = e->mimeData();
     if (mime->hasUrls())
     {
@@ -313,6 +348,11 @@ void Calendar::dragEnterEvent(QDragEnterEvent *e)
 
 void Calendar::dragMoveEvent(QDragMoveEvent *e)
 {
+    if (!acceptDnD->isChecked())
+    {
+        e->ignore();
+        return;
+    }
     const QMimeData *mime = e->mimeData();
     if (mime->hasUrls())
     {
@@ -337,6 +377,11 @@ void Calendar::dragMoveEvent(QDragMoveEvent *e)
 
 void Calendar::dropEvent(QDropEvent *e)
 {
+    if (!acceptDnD->isChecked())
+    {
+        e->ignore();
+        return;
+    }
     const QMimeData *mime = e->mimeData();
     if (mime->hasUrls())
     {
@@ -387,7 +432,7 @@ void Calendar::updateTodo()
             }
             else
             {
-                 label->setBackgroundColor(Qt::GlobalColor::white);
+                label->setBackgroundColor(Qt::GlobalColor::white);
                 for (const TodoItem &i : list)
                 {
                     strlist << i.text;
@@ -397,13 +442,20 @@ void Calendar::updateTodo()
                     }
                 }
             }
-            int fileCount = Storage::i()->getFileCount(label->date());
-            if (fileCount > 0)
+            auto files = Storage::i()->getFileList(label->date());
+            for (const FileInfo &fi : files)
             {
-                strlist.append(tr("%1 file(s)").arg(fileCount));
+                strlist << fi.fileName;
             }
             label->setText(strlist.join("\n"));
             label->update();
         }
     }
+}
+
+void Calendar::setToday()
+{
+    QDate now = QDate::currentDate();
+    setSelected(now);
+    setMonth(now);
 }

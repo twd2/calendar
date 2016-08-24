@@ -2,6 +2,8 @@
 #define TODOLIST_H
 
 #include "fileinfo.h"
+#include "draggablelist.h"
+#include "draggablelabel.h"
 
 #include <QDialog>
 #include <QDate>
@@ -12,13 +14,15 @@
 #include <QMap>
 #include <QMouseEvent>
 #include <QVector>
+#include <QScrollArea>
 
 class TodoList : public QDialog
 {
     Q_OBJECT
 protected:
     QTableWidget *table;
-    QListWidget *fileList;
+    DraggableList *fileList;
+    QScrollArea *fileListScroll;
     QVBoxLayout *mainLayout;
     QHBoxLayout *controllers;
     QHBoxLayout *okLayout;
@@ -32,10 +36,12 @@ public slots:
     void add();
     void del();
     void edit(int);
+    void delFile();
 private:
     QMap<int, int> indexToID;
     QVector<FileInfo> files;
     void initControllers();
+    void initFileList();
     void refreshItems();
 };
 

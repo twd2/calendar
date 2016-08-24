@@ -9,25 +9,41 @@
 #include <QDebug>
 #include <QLabel>
 #include <QMessageBox>
-#include <QMimeData>
-#include <QDrag>
 
 TodoList::TodoList(const QDate &date, QWidget *parent) :
     QDialog(parent), date(date),
     mainLayout(new QVBoxLayout(this)), controllers(new QHBoxLayout()), okLayout(new QHBoxLayout())
 {
     setWindowTitle(tr("Todo List on %1").arg(date.toString("yyyy-MM-dd")));
+
     table = new QTableWidget(0, 2, this);
-    fileList = new QListWidget(this);
     mainLayout->addWidget(new QLabel(tr("Todo List"), this));
     mainLayout->addWidget(table);
     mainLayout->addLayout(controllers);
-    mainLayout->addWidget(new QLabel(tr("Today's files"), this));
-    mainLayout->addWidget(fileList);
+    initFileList();
     mainLayout->addLayout(okLayout);
 
     initControllers();
     refreshItems();
+    //setLayout(mainLayout);
+}
+
+void TodoList::initFileList()
+{
+    mainLayout->addWidget(new QLabel(tr("Today's files"), this));
+
+    fileListScroll = new QScrollArea(this);
+    fileListScroll->setWidgetResizable(true);
+    fileList = new DraggableList(this);
+    fileList->show();
+    fileListScroll->setWidget(fileList);
+    fileListScroll->show();
+    mainLayout->addWidget(fileListScroll);
+
+    QPushButton *btnDelete = new QPushButton(tr("Delete File"), this);
+    connect(btnDelete, SIGNAL(clicked(bool)), this, SLOT(delFile()));
+    btnDelete->show();
+    mainLayout->addWidget(btnDelete);
 }
 
 void TodoList::initControllers()
@@ -72,19 +88,9 @@ TodoList::~TodoList()
 
 void TodoList::mousePressEvent(QMouseEvent *e)
 {
-    QPoint hotSpot = e->pos() - pos();
-
-    QList<QUrl> urls;
-    urls.append(QUrl("file:///Users/twd2/Documents/summer/qt/calendar/storage.h"));
-
-    QMimeData *mimeData = new QMimeData();
-    mimeData->setUrls(urls);
-
-    QDrag *drag = new QDrag(this);
-    drag->setMimeData(mimeData);
-    drag->setObjectName("hello");
-    drag->setHotSpot(hotSpot);
-    // qDebug() << drag->exec(Qt::CopyAction, Qt::CopyAction);
+    qDebug() << "TodoList" << e->pos();
+    // e->ignore();
+    // QWidget::mousePressEvent(e);
 }
 
 void TodoList::refreshItems()
@@ -114,7 +120,10 @@ void TodoList::refreshItems()
     fileList->clear();
     for (FileInfo fi : files)
     {
-        fileList->addItem(fi.fileName);
+        auto *dl = new DraggableLabel(fi.fileName, this);
+        dl->filePath = Storage::i()->getFilePath(fi.id);
+        dl->userData = fi.id;
+        fileList->append(dl);
     }
 }
 
@@ -172,4 +181,10 @@ void TodoList::edit(int index)
         Storage::i()->set(indexToID[index], edit.item());
         refreshItems();
     }
+}
+
+void TodoList::delFile()
+{
+    Storage::i()->delFile(fileList->selectedLabel->userData.toString());
+    refreshItems();
 }

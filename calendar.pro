@@ -14,7 +14,9 @@ SOURCES += main.cpp \
     dateitem.cpp \
     todoedit.cpp \
     global.cpp \
-    fileinfo.cpp
+    fileinfo.cpp \
+    draggablelabel.cpp \
+    draggablelist.cpp
 
 HEADERS += \
     todolist.h \
@@ -25,6 +27,8 @@ HEADERS += \
     dateitem.h \
     todoedit.h \
     global.h \
-    fileinfo.h
+    fileinfo.h \
+    draggablelabel.h \
+    draggablelist.h
 
 FORMS +=

@@ -32,10 +32,11 @@ void DateItem::paintEvent(QPaintEvent *e)
     QFont f;
     f.setPixelSize(13);
     p.setFont(f);
-    p.drawText(rect(), Qt::AlignCenter, QString::number(_date.day()));
-    f.setPixelSize(13);
-    p.setFont(f);
     p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
+    f.setPixelSize(13);
+    f.setBold(true);
+    p.setFont(f);
+    p.drawText(rect(), Qt::AlignCenter, QString::number(_date.day()));
 
     if (_selected && _enabled)
     {
@@ -49,6 +50,7 @@ void DateItem::mouseReleaseEvent(QMouseEvent *e)
     {
         emit clicked();
     }
+    e->ignore();
 }
 
 void DateItem::mouseDoubleClickEvent(QMouseEvent *e)

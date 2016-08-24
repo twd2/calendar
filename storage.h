@@ -26,6 +26,7 @@ public:
     int getFileCount(const QDate &date);
     QString getFilePath(const QString &id);
     QByteArray getFileData(const QString &id);
+    void delFile(const QString &id);
     void load();
     void save();
     void load(const QString &fileName);

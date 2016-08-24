@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QPushButton>
 
 class Calendar : public QWidget
 {
@@ -16,15 +17,25 @@ protected:
     QVBoxLayout *mainLayout;
     QHBoxLayout *controllers;
     QGridLayout *grid;
+    QVBoxLayout *settingLayout;
     QDate _month;
     QComboBox *yearBox, *monthBox;
     QDate selectedDate;
+    QPushButton *movable, *acceptDnD;
 public:
     explicit Calendar(QWidget *parent = nullptr);
 
 protected:
     void paintEvent(QPaintEvent *);
     void resizeEvent(QResizeEvent *);
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dragMoveEvent(QDragMoveEvent *) override;
+    void dropEvent(QDropEvent *) override;
+
 signals:
 
 public slots:
@@ -36,18 +47,12 @@ public slots:
     void changeMonth(int);
     void setSelected(const QDate &);
     void updateTodo();
+    void setToday();
 private:
     void initConrtollers();
     void initCalendar();
     QPoint lastPos, lastMousePos;
     bool isMousePressed = false;
-    void mousePressEvent(QMouseEvent *) override;
-    void mouseMoveEvent(QMouseEvent *) override;
-    void mouseReleaseEvent(QMouseEvent *) override;
-
-    void dragEnterEvent(QDragEnterEvent *) override;
-    void dragMoveEvent(QDragMoveEvent *) override;
-    void dropEvent(QDropEvent *) override;
 };
 
 #endif // CALENDAR_H
