@@ -7,6 +7,7 @@
 #include <QFile>
 
 Storage *Storage::instance = nullptr;
+const QString Storage::defaultFileName = "calendar.json";
 
 Storage::Storage()
 {
@@ -30,11 +31,11 @@ int Storage::add(TodoItem item)
     return item.id;
 }
 
-void Storage::del(int ID)
+void Storage::del(int id)
 {
-    if (ID >= 0 && ID <= _items.count() - 1)
+    if (id >= 0 && id <= _items.count() - 1)
     {
-        _items.removeAt(ID);
+        _items.removeAt(id);
     }
     save();
 }
@@ -56,18 +57,28 @@ QVector<TodoItem> Storage::get(const QDate &date)
     return items;
 }
 
-TodoItem Storage::get(int ID)
+TodoItem Storage::get(int id)
 {
-    return _items[ID];
+    return _items[id];
 }
 
-void Storage::set(int ID, const TodoItem &item)
+void Storage::set(int id, const TodoItem &item)
 {
-    _items[ID] = item;
+    _items[id] = item;
     save();
 }
 
 void Storage::load()
+{
+    load(defaultFileName);
+}
+
+void Storage::save()
+{
+    save(defaultFileName);
+}
+
+void Storage::load(const QString &fileName)
 {
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly))
@@ -88,16 +99,16 @@ void Storage::load()
         i.dayOfWeek = obj["dayOfWeek"].toInt();
         i.text = obj["text"].toString();
 
-        auto colorObj = obj["color"].toObject();
-        QColor c = QColor::fromRgb(colorObj["r"].toInt(),
-                                   colorObj["g"].toInt(),
-                                   colorObj["b"].toInt());
+        auto colorArray = obj["color"].toArray();
+        QColor c = QColor::fromRgb(colorArray[0].toInt(),
+                                   colorArray[1].toInt(),
+                                   colorArray[2].toInt());
         i.color = c;
         _items.append(i);
     }
 }
 
-void Storage::save()
+void Storage::save(const QString &fileName)
 {
     QJsonArray array;
     for (const TodoItem &i : _items)

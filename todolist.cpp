@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <QLabel>
 #include <QMessageBox>
+#include <QMimeData>
+#include <QDrag>
 
 TodoList::TodoList(const QDate &date, QWidget *parent) :
     QDialog(parent), date(date),
@@ -15,13 +17,16 @@ TodoList::TodoList(const QDate &date, QWidget *parent) :
 {
     setWindowTitle(tr("Todo List on %1").arg(date.toString("yyyy-MM-dd")));
     table = new QTableWidget(0, 2, this);
-    mainLayout->addWidget(new QLabel("Todo List", this));
+    fileList = new QListWidget(this);
+    mainLayout->addWidget(new QLabel(tr("Todo List"), this));
     mainLayout->addWidget(table);
     mainLayout->addLayout(controllers);
+    mainLayout->addWidget(new QLabel(tr("Today's files"), this));
+    mainLayout->addWidget(fileList);
     mainLayout->addLayout(okLayout);
 
     initControllers();
-    refreshTodoTable();
+    refreshItems();
 }
 
 void TodoList::initControllers()
@@ -64,8 +69,26 @@ TodoList::~TodoList()
 
 }
 
-void TodoList::refreshTodoTable()
+void TodoList::mousePressEvent(QMouseEvent *e)
 {
+    QPoint hotSpot = e->pos() - pos();
+
+    QList<QUrl> urls;
+    urls.append(QUrl("file:///Users/twd2/Documents/summer/qt/calendar/storage.h"));
+
+    QMimeData *mimeData = new QMimeData();
+    mimeData->setUrls(urls);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+    drag->setObjectName("hello");
+    drag->setHotSpot(hotSpot);
+    // qDebug() << drag->exec(Qt::CopyAction, Qt::CopyAction);
+}
+
+void TodoList::refreshItems()
+{
+    // table
     auto list = Storage::i()->get(date);
     table->clearSelection();
     table->setRowCount(list.count());
@@ -73,17 +96,27 @@ void TodoList::refreshTodoTable()
     for (int i = 0; i < list.count(); ++i)
     {
         const auto &item = list[i];
-        table->setItem(i, 0, new QTableWidgetItem(item.matchToString()));
-        table->setItem(i, 1, new QTableWidgetItem(item.text));
+        QTableWidgetItem *onItem = new QTableWidgetItem(item.matchToString()),
+                         *textItem = new QTableWidgetItem(item.text);
+        onItem->setBackgroundColor(item.color);
+        textItem->setBackgroundColor(item.color);
+        table->setItem(i, 0, onItem);
+        table->setItem(i, 1, textItem);
+
         indexToID[i] = item.id;
     }
+
+    // list
+    fileList->clear();
+    fileList->addItem("123");
+    fileList->addItem("456");
 }
 
 void TodoList::add()
 {
-    // TODO
     TodoEdit edit;
     edit.setWindowTitle(tr("Add"));
+    edit.setItem(TodoItem(date));
     if (edit.exec())
     {
         if (!edit.item().match(date))
@@ -91,7 +124,7 @@ void TodoList::add()
             QMessageBox(QMessageBox::Information, tr("Note"), tr("The rule doesn't match this date, and it will show on another date.")).exec();
         }
         Storage::i()->add(edit.item());
-        refreshTodoTable();
+        refreshItems();
     }
 }
 
@@ -116,12 +149,11 @@ void TodoList::del()
     {
         Storage::i()->del(indexToDelete[i]);
     }
-    refreshTodoTable();
+    refreshItems();
 }
 
 void TodoList::edit(int index)
 {
-    // TODO
     TodoEdit edit;
     edit.setWindowTitle(tr("Edit"));
     edit.setItem(Storage::i()->get(indexToID[index]));
@@ -132,6 +164,6 @@ void TodoList::edit(int index)
             QMessageBox(QMessageBox::Information, tr("Note"), tr("The rule no longer matches this date, and will disappear from this window.")).exec();
         }
         Storage::i()->set(indexToID[index], edit.item());
-        refreshTodoTable();
+        refreshItems();
     }
 }

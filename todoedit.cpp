@@ -1,10 +1,12 @@
 #include "todoedit.h"
 #include "global.h"
 
+#include <QColorDialog>
 #include <QPushButton>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QDebug>
+#include <QPalette>
 
 TodoEdit::TodoEdit(QWidget *parent)
     : QDialog(parent), mainLayout(new QVBoxLayout(this)), boxLayout(new QHBoxLayout()),
@@ -16,6 +18,7 @@ TodoEdit::TodoEdit(QWidget *parent)
     setLayout(mainLayout);
 
     initControllers();
+    setItem(_item);
 }
 
 void TodoEdit::initControllers()
@@ -60,7 +63,12 @@ void TodoEdit::initControllers()
     dayOfWeekBox->show();
     boxLayout->addWidget(dayOfWeekBox);
 
-    _item.year = _item.month = _item.day = _item.dayOfWeek = -1;
+    btnColor = new QPushButton(tr("Color"), this);
+    boxLayout->addWidget(btnColor);
+    // btnColor->setAutoFillBackground(true);
+    updateColor();
+    connect(btnColor, SIGNAL(clicked(bool)), this, SLOT(setColor()));
+    btnColor->show();
 
     labText = new QLabel(tr("Things To Do:"), this);
     textboxLayout->addWidget(labText);
@@ -73,7 +81,7 @@ void TodoEdit::initControllers()
 
     QPushButton *btnCancel = new QPushButton(tr("Cancel"), this);
     btnCancel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(btnCancel, SIGNAL(clicked(bool)), this, SLOT(reject()));
     btnCancel->show();
     okLayout->addWidget(btnCancel);
 
@@ -178,6 +186,18 @@ void TodoEdit::ok()
     accept();
 }
 
+void TodoEdit::setColor()
+{
+    QColorDialog cd ;
+    cd.setWindowTitle(tr("Choose color"));
+    cd.setCurrentColor(_item.color);
+    if (cd.exec())
+    {
+        _item.color = cd.currentColor();
+        updateColor();
+    }
+}
+
 void TodoEdit::setItem(TodoItem item)
 {
     _item = item;
@@ -220,9 +240,23 @@ void TodoEdit::setItem(TodoItem item)
     }
 
     updateDays();
+    updateColor();
 }
 
 TodoItem TodoEdit::item()
 {
     return _item;
+}
+
+void TodoEdit::updateColor()
+{
+    int r, g, b;
+    _item.color.getRgb(&r, &g, &b);
+    double gray = r * 0.299 + g * 0.587 + b * 0.114;
+    QString textColor = "black";
+    if (gray < 128)
+    {
+        textColor = "white";
+    }
+    btnColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);color: %4;").arg(r).arg(g).arg(b).arg(textColor));
 }

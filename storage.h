@@ -12,19 +12,22 @@ private:
     QVector<TodoItem> _items;
     static Storage *instance;
 public:
-    const QString fileName = "calendar.json";
+    static const QString defaultFileName;
     Storage();
     static Storage *i();
     QVector<TodoItem> get(const QDate &date);
     int add(TodoItem item);
-    void del(int ID);
-    TodoItem get(int ID);
-    void set(int ID, const TodoItem &item);
-    QString putFile(QString source);
-    QString getFile(const QString &ID);
+    void del(int id);
+    TodoItem get(int id);
+    void set(int id, const TodoItem &item);
+    QString putFile(const QString &source, const QDate &date);
+    QVector<QString> getFileList(const QDate &date);
+    // QString getFile(const QString &id);
+    QByteArray getFileData(const QString &id);
     void load();
     void save();
-    // QByteArray getFileData(const QString &ID);
+    void load(const QString &fileName);
+    void save(const QString &fileName);
 };
 
 #endif // STORAGE_H

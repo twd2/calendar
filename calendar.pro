@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     calendar.cpp \
     dateitem.cpp \
     todoedit.cpp \
-    global.cpp
+    global.cpp \
+    fileinfo.cpp
 
 HEADERS += \
     todolist.h \
@@ -23,6 +24,7 @@ HEADERS += \
     calendar.h \
     dateitem.h \
     todoedit.h \
-    global.h
+    global.h \
+    fileinfo.h
 
 FORMS +=

@@ -9,6 +9,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QLineEdit>
+#include<QPushButton>
 
 class TodoEdit : public QDialog
 {
@@ -21,6 +22,7 @@ protected:
     QHBoxLayout *okLayout;
     QComboBox *yearBox, *monthBox, *dayBox, *dayOfWeekBox;
     QLabel *labText;
+    QPushButton *btnColor;
     QLineEdit *text;
 
 public:
@@ -39,10 +41,12 @@ public slots:
     void setDayOfWeek(int);
     void setItem(TodoItem);
     void ok();
+    void setColor();
 private:
     bool _warningShowed = false;
     void initControllers();
     void updateDays();
+    void updateColor();
 };
 
 #endif // NEWTODO_H

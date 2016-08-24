@@ -11,10 +11,11 @@ class TodoItem
 public:
     // -1 means to match all
     int id = 0;
-    int year, month, day, dayOfWeek = -1;
-    QString text;
+    int year = -1, month = -1, day = -1, dayOfWeek = -1;
+    QString text = "";
     QColor color = Qt::GlobalColor::white;
     TodoItem();
+    explicit TodoItem(const QDate &);
     bool match(const QDate &) const;
     QString matchToString() const;
     ~TodoItem();

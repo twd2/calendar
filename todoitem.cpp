@@ -4,12 +4,18 @@
 #include <QStringList>
 #include <QDate>
 
-TodoItem::TodoItem()
-    : year(QDate::currentDate().year()),
-      month(QDate::currentDate().month()),
-      day(QDate::currentDate().day())
+TodoItem::TodoItem(const QDate &date)
+    : year(date.year()),
+      month(date.month()),
+      day(date.day())
 {
-    text = QDateTime::currentDateTime().toString();
+
+}
+
+TodoItem::TodoItem()
+    : TodoItem(QDate::currentDate())
+{
+
 }
 
 bool TodoItem::match(const QDate &date) const
