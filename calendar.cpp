@@ -15,6 +15,10 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QFileDialog>
+#include <QResizeEvent>
+#include <QBitmap>
+#include <QGraphicsView>
 
 
 Calendar::Calendar(QWidget *parent)
@@ -23,8 +27,8 @@ Calendar::Calendar(QWidget *parent)
 {
     setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
-    setWindowOpacity(1.0);
-    setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    // setWindowOpacity(0.7);
+    // setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
     // set background color
     QPalette pal(palette());
@@ -61,12 +65,12 @@ void Calendar::initConrtollers()
     controllers->addWidget(btnPrev);
 
     QPushButton *btnImport = new QPushButton(tr("Import"), this);
-    // connect(btnImport, SIGNAL(clicked(bool)), this, SLOT(/*TODO*/()));
+    connect(btnImport, SIGNAL(clicked(bool)), this, SLOT(importTodo()));
     btnImport->show();
     controllers->addWidget(btnImport);
 
     QPushButton *btnExport = new QPushButton(tr("Export"), this);
-    // connect(btnExport, SIGNAL(clicked(bool)), this, SLOT(/*TODO*/()));
+    connect(btnExport, SIGNAL(clicked(bool)), this, SLOT(exportTodo()));
     btnExport->show();
     controllers->addWidget(btnExport);
 
@@ -291,22 +295,33 @@ void Calendar::resizeEvent(QResizeEvent *)
 {
 //    QPainterPath path;
 //    //QRectF rect = QRectF(0,0,200,100);
-//    path.addRoundRect(rect(), 5, 5);
+//    path.addEllipse(rect());
+//    //path.addRoundRect(rect, 5, 5);
 //    QPolygon polygon = path.toFillPolygon().toPolygon();
 //    //获得这个路径上的所有的点
 //    QRegion region(polygon);
 //    //根据这个点构造这个区域
 //    setMask(region);
+//    QPixmap pixmap(rect().size());
+//    QPainter p(&pixmap);
+//    p.fillRect(rect(), Qt::GlobalColor::black);
+//    p.fillRect(0, 0, 100, 100, Qt::white);
+//    p.fillRect(100, 100, 100, 100, Qt::white);
+//    p.fillRect(200, 200, 100, 100, Qt::white);
+//    setMask(pixmap.createMaskFromColor(Qt::black));
+//    pixmap.save("x.png");
 }
 
 void Calendar::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton)
     {
+        e->ignore();
         return;
     }
     if (!movable->isChecked())
     {
+        e->ignore();
         return;
     }
     isMousePressed = true;
@@ -316,6 +331,11 @@ void Calendar::mousePressEvent(QMouseEvent *e)
 
 void Calendar::mouseMoveEvent(QMouseEvent *e)
 {
+    if (!movable->isChecked())
+    {
+        e->ignore();
+        return;
+    }
     if (isMousePressed)
     {
         this->move(lastPos + e->globalPos() - lastMousePos);
@@ -324,6 +344,11 @@ void Calendar::mouseMoveEvent(QMouseEvent *e)
 
 void Calendar::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (!movable->isChecked())
+    {
+        e->ignore();
+        return;
+    }
     qDebug() << "mouseReleaseEvent";
     isMousePressed = false;
 }
@@ -458,4 +483,38 @@ void Calendar::setToday()
     QDate now = QDate::currentDate();
     setSelected(now);
     setMonth(now);
+}
+
+void Calendar::importTodo()
+{
+    QFileDialog fd;
+    QStringList filters;
+    filters << tr("JSON file (*.json)")
+            << tr("All files (*)");
+    fd.setNameFilters(filters);
+    fd.setWindowTitle(tr("Import"));
+    fd.setFileMode(QFileDialog::ExistingFile);
+    fd.setAcceptMode(QFileDialog::AcceptOpen);
+    if (fd.exec())
+    {
+        qDebug() << fd.selectedFiles()[0];
+        Storage::i()->save(fd.selectedFiles()[0]);
+    }
+}
+
+void Calendar::exportTodo()
+{
+    QFileDialog fd;
+    QStringList filters;
+    filters << tr("JSON file (*.json)")
+            << tr("All files (*)");
+    fd.setNameFilters(filters);
+    fd.setWindowTitle(tr("Export"));
+    fd.setFileMode(QFileDialog::AnyFile);
+    fd.setAcceptMode(QFileDialog::AcceptSave);
+    if (fd.exec())
+    {
+        qDebug() << fd.selectedFiles()[0];
+        Storage::i()->save(fd.selectedFiles()[0]);
+    }
 }

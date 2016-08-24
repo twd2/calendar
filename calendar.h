@@ -26,8 +26,8 @@ public:
     explicit Calendar(QWidget *parent = nullptr);
 
 protected:
-    void paintEvent(QPaintEvent *);
-    void resizeEvent(QResizeEvent *);
+    void paintEvent(QPaintEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
@@ -36,6 +36,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *) override;
     void dropEvent(QDropEvent *) override;
 
+    // void resizeEvent(QResizeEvent *) override;
 signals:
 
 public slots:
@@ -48,6 +49,8 @@ public slots:
     void setSelected(const QDate &);
     void updateTodo();
     void setToday();
+    void importTodo();
+    void exportTodo();
 private:
     void initConrtollers();
     void initCalendar();

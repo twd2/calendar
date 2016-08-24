@@ -32,3 +32,5 @@ HEADERS += \
     draggablelist.h
 
 FORMS +=
+
+TRANSLATIONS += zh_CN.ts

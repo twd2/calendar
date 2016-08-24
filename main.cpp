@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QTranslator>
 
 #include "widget.h"
 #include "storage.h"
@@ -8,6 +9,11 @@
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
+
+    QTranslator trans;
+    trans.load(":/locale/zh_CN.qm");
+    app.installTranslator(&trans);
+
     QDesktopWidget *desktop = QApplication::desktop();
     QRect screen = desktop->screenGeometry();
 
@@ -18,6 +24,7 @@ int main(int argc, char **argv)
     w->show(); // */
     Calendar *c = new Calendar();
     c->resize(screen.width() * 2 / 3, screen.height() * 2 / 3);
+    c->setWindowTitle(QObject::tr("Wandai's Calendar"));
     c->show(); // */
 
     Storage::i()->save();
