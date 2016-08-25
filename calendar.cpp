@@ -25,7 +25,7 @@ Calendar::Calendar(QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
       controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
-    setWindowFlags(Qt::FramelessWindowHint);
+    // setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
     // setWindowOpacity(0.7);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -451,6 +451,7 @@ void Calendar::updateTodo()
             Q_ASSERT(label != nullptr);
             auto list = Storage::i()->get(label->date());
             QStringList strlist;
+            strlist << "<body style='margin: 0px;padding: 0px;'>";
             if (list.count() == 0)
             {
                 label->setBackgroundColor(Qt::GlobalColor::white);
@@ -460,7 +461,11 @@ void Calendar::updateTodo()
                 label->setBackgroundColor(Qt::GlobalColor::white);
                 for (const TodoItem &i : list)
                 {
-                    strlist << i.text;
+                    int r, g, b;
+                    i.color.getRgb(&r, &g, &b);
+                    strlist << QString("<p style='background-color: rgb(%1, %2, %3);color: %4;margin: 0px;padding: 0px;'>%5</p>")
+                                   .arg(r).arg(g).arg(b).arg(Global::getTextColorName(i.color))
+                                   .arg(i.text.toHtmlEscaped());
                     if (i.fullMatch(label->date()))
                     {
                          label->setBackgroundColor(i.color);
@@ -470,8 +475,9 @@ void Calendar::updateTodo()
             auto files = Storage::i()->getFileList(label->date());
             for (const FileInfo &fi : files)
             {
-                strlist << fi.fileName;
+                strlist << QString("<i style='margin: 0px;padding: 0px;'>%1</i>").arg(fi.fileName.toHtmlEscaped());
             }
+            strlist << "</body>";
             label->setText(strlist.join("\n"));
             label->update();
         }

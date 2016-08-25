@@ -3,6 +3,7 @@
 
 #include <QPaintEvent>
 #include <QPainter>
+#include <QTextDocument>
 
 DateItem::DateItem(QWidget *parent) : QWidget(parent)
 {
@@ -12,7 +13,7 @@ DateItem::DateItem(QWidget *parent) : QWidget(parent)
 void DateItem::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
-    p.fillRect(this->rect(), colorBackground);
+    p.fillRect(rect(), colorBackground);
 
     if (_enabled)
     {
@@ -30,9 +31,12 @@ void DateItem::paintEvent(QPaintEvent *e)
         p.setPen(_colorDisabledText);
     }
     QFont f;
-    f.setPixelSize(13);
-    p.setFont(f);
-    p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
+    //f.setPixelSize(13);
+    //p.setFont(f);
+    QTextDocument doc;
+    doc.setHtml(_text);
+    doc.drawContents(&p);
+    //p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
     f.setPixelSize(13);
     f.setBold(true);
     p.setFont(f);

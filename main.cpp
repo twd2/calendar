@@ -14,6 +14,10 @@ int main(int argc, char **argv)
     trans.load(":/locale/zh_CN.qm");
     app.installTranslator(&trans);
 
+    QTranslator qtTrans;
+    qtTrans.load(":/locale/qt_zh_CN.qm");
+    app.installTranslator(&qtTrans);
+
     QDesktopWidget *desktop = QApplication::desktop();
     QRect screen = desktop->screenGeometry();
 
@@ -22,10 +26,10 @@ int main(int argc, char **argv)
     /*Widget *w = new Widget();
     w->resize(screen.width() / 3, screen.height() / 3);
     w->show(); // */
-    Calendar *c = new Calendar();
-    c->resize(screen.width() * 2 / 3, screen.height() * 2 / 3);
-    c->setWindowTitle(QObject::tr("Wandai's Calendar"));
-    c->show(); // */
+    Calendar c;
+    c.resize(screen.width() * 2 / 3, screen.height() * 2 / 3);
+    c.setWindowTitle(QObject::tr("Wandai's Calendar"));
+    c.show(); // */
 
     Storage::i()->save();
     return app.exec();

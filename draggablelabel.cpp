@@ -11,6 +11,7 @@ DraggableLabel::DraggableLabel(const QString &text, QWidget *parent)
     : QLabel(text, parent)
 {
     _defaultPal = palette();
+    setMargin(5);
 }
 
 DraggableLabel::~DraggableLabel()
@@ -54,7 +55,7 @@ void DraggableLabel::mousePressEvent(QMouseEvent *e)
     drag->setHotSpot(hotSpot);
 
     qDebug() << drag->exec(Qt::CopyAction, Qt::CopyAction);
-    // e->ignore();
+    delete drag;
 }
 
 void DraggableLabel::mouseDoubleClickEvent(QMouseEvent *e)
