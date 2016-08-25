@@ -1,2 +1,2 @@
 # calendar
-Qt Project
+Qt Huge Project
