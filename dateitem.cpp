@@ -37,7 +37,7 @@ void DateItem::paintEvent(QPaintEvent *e)
     doc.setHtml(_text);
     doc.drawContents(&p);
     //p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
-    f.setPixelSize(13);
+    f.setPointSize(13);
     f.setBold(true);
     p.setFont(f);
     p.drawText(rect(), Qt::AlignCenter, QString::number(_date.day()));
