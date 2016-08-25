@@ -103,7 +103,7 @@ void TodoList::refreshItems()
     for (int i = 0; i < list.count(); ++i)
     {
         const auto &item = list[i];
-        QTableWidgetItem *onItem = new QTableWidgetItem(item.matchToString()),
+        QTableWidgetItem *onItem = new QTableWidgetItem(item.ruleToString()),
                          *textItem = new QTableWidgetItem(item.text);
         onItem->setBackgroundColor(item.color);
         onItem->setTextColor(Global::getTextColor(item.color));
@@ -145,7 +145,7 @@ void TodoList::add()
 
 void TodoList::del()
 {
-    QVector<int> indexToDelete;
+    QVector<int> idToDelete;
     for (auto &range : table->selectedRanges())
     {
         for (int index = range.topRow(); index <= range.bottomRow(); ++index)
@@ -156,13 +156,46 @@ void TodoList::del()
                 qDebug() << "no index";
                 continue;
             }
-            indexToDelete.append(indexToID[index]);
+            idToDelete.append(indexToID[index]);
         }
     }
 
-    for (int i = indexToDelete.count() - 1; i >= 0; --i)
+    if (idToDelete.count() == 0)
     {
-        Storage::todo()->del(indexToDelete[i]);
+        return;
+    }
+
+    if (QMessageBox(QMessageBox::Question, tr("Confirm"), tr("Are you sure to delete the todo(s) you selected?"),
+                    QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
+    {
+        qDebug() << "cancelled";
+        return;
+    }
+
+    for (int i = idToDelete.count() - 1; i >= 0; --i)
+    {
+        TodoItem item = Storage::todo()->get(idToDelete[i]);
+        if (item.isMulti())
+        {
+            if (QMessageBox(QMessageBox::Question, tr("Confirm"), tr("Todo \"%1\" on %2 matches more than one day. \n"
+                                                                     "Would you like to delete the whole rule or remove this day from the rule? \n"
+                                                                     "Press \"Yes\" to delete the whole rule.")
+                                                                    .arg(item.text, item.ruleToString()),
+                            QMessageBox::Yes | QMessageBox::No).exec() == QMessageBox::Yes)
+            {
+                // delete the whole rule
+                Storage::todo()->del(idToDelete[i]);
+            }
+            else
+            {
+                item.addExcept(date);
+                Storage::todo()->set(idToDelete[i], item);
+            }
+        }
+        else
+        {
+            Storage::todo()->del(idToDelete[i]);
+        }
     }
     refreshItems();
 }
@@ -185,6 +218,12 @@ void TodoList::edit(int index)
 
 void TodoList::delFile()
 {
+    if (QMessageBox(QMessageBox::Question, tr("Confirm"), tr("Are you sure?"),
+                    QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
+    {
+        qDebug() << "cancelled";
+        return;
+    }
     Storage::file()->delFile(fileList->selectedLabel->userData.toString());
     refreshItems();
 }

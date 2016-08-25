@@ -176,7 +176,7 @@ void TodoEdit::ok()
         if (dow != date.dayOfWeek())
         {
             if (QMessageBox(QMessageBox::Warning, tr("Warning"), tr("The rule cannot match any day, continue?"),
-                            QMessageBox::Ok | QMessageBox::Cancel).exec() == QMessageBox::Cancel)
+                            QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
             {
                 qDebug() << "cancelled";
                 return;

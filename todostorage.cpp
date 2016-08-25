@@ -82,6 +82,7 @@ QVector<TodoItem> TodoStorage::fromJsonDoc(const QJsonDocument &doc)
         i.day = obj["day"].toInt();
         i.dayOfWeek = obj["dayOfWeek"].toInt();
         i.text = obj["text"].toString();
+        i.except = obj["except"].toString();
 
         auto colorArray = obj["color"].toArray();
         QColor c = QColor::fromRgb(colorArray[0].toInt(),
@@ -132,6 +133,7 @@ QJsonDocument TodoStorage::toJsonDoc(const QVector<TodoItem> &items)
         color.append(b);
         obj["color"] = color;
         obj["text"] = i.text;
+        obj["except"] = i.except;
         array.append(obj);
     }
 

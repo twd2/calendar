@@ -43,7 +43,6 @@ public slots:
     void ok();
     void setColor();
 private:
-    bool _warningShowed = false;
     void initControllers();
     void updateDays();
     void updateColor();

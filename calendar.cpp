@@ -546,6 +546,7 @@ void Calendar::movableChanged()
         setWindowMouseEventTransparent(true);
         setWindowOpacity(WINDOWOPACITY);
 
+        // there is a little bit tricky
         QPushButton *btnRestore = new QPushButton(tr("Movable"));
         btnRestore->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
         btnRestore->move(pos() + movable->pos());

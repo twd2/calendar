@@ -18,12 +18,18 @@ TodoItem::TodoItem()
 
 }
 
+bool TodoItem::isMulti() const
+{
+    return (year == -1 || month == -1 || day == -1);
+}
+
 bool TodoItem::match(const QDate &date) const
 {
     return (year == -1 || year == date.year())
            && (month == -1 || month == date.month())
            && (day == -1 || day == date.day())
-           && (dayOfWeek == -1 || dayOfWeek == date.dayOfWeek());
+           && (dayOfWeek == -1 || dayOfWeek == date.dayOfWeek())
+           && except.indexOf(date.toString("yyyyMMdd")) == -1; // not in except list
 }
 
 bool TodoItem::fullMatch(const QDate &date) const
@@ -33,7 +39,7 @@ bool TodoItem::fullMatch(const QDate &date) const
            && day == date.day();
 }
 
-QString TodoItem::matchToString() const
+QString TodoItem::ruleToString() const
 {
     QStringList list;
     if (year == -1)
@@ -68,6 +74,11 @@ QString TodoItem::matchToString() const
         list << QObject::tr("only %1").arg(Global::dayOfWeekString(dayOfWeek - 1));
     }
     return list.join(QObject::tr(", "));
+}
+
+void TodoItem::addExcept(const QDate &date)
+{
+    except += date.toString("yyyyMMdd") + "|";
 }
 
 TodoItem::~TodoItem()
