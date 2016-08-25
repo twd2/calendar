@@ -4,39 +4,40 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="calendar.cpp" line="55"/>
+        <location filename="calendar.cpp" line="62"/>
         <source>&lt;&lt; Previous month</source>
         <translation>&lt;&lt; 上一月</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="59"/>
+        <location filename="calendar.cpp" line="66"/>
         <source>Next month &gt;&gt;</source>
         <translation>下一月 &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="67"/>
+        <location filename="calendar.cpp" line="74"/>
         <location filename="calendar.cpp" line="495"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="72"/>
+        <location filename="calendar.cpp" line="79"/>
         <location filename="calendar.cpp" line="512"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="95"/>
+        <location filename="calendar.cpp" line="102"/>
         <source>Today</source>
         <translation>今日</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="133"/>
+        <location filename="calendar.cpp" line="140"/>
+        <location filename="calendar.cpp" line="549"/>
         <source>Movable</source>
         <translation>可移动</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="138"/>
+        <location filename="calendar.cpp" line="146"/>
         <source>DnD</source>
         <translation>可拖放</translation>
     </message>
@@ -393,7 +394,7 @@
         <translation>星期天</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="27"/>
+        <location filename="main.cpp" line="37"/>
         <source>Wandai&apos;s Calendar</source>
         <translation>Wandai 日历</translation>
     </message>
@@ -449,7 +450,7 @@
     <message>
         <location filename="todoedit.cpp" line="57"/>
         <source>any day of week</source>
-        <translation>任意星期</translation>
+        <translation>无论星期几</translation>
     </message>
     <message>
         <location filename="todoedit.cpp" line="66"/>
@@ -502,7 +503,7 @@
     <message>
         <location filename="todolist.cpp" line="33"/>
         <source>Today&apos;s files</source>
-        <translation>今天的文件</translation>
+        <translation>今日文件</translation>
     </message>
     <message>
         <location filename="todolist.cpp" line="43"/>

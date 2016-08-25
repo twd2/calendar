@@ -96,7 +96,7 @@ void TodoList::mousePressEvent(QMouseEvent *e)
 void TodoList::refreshItems()
 {
     // table
-    auto list = Storage::i()->get(date);
+    auto list = Storage::todo()->get(date);
     table->clearSelection();
     table->setRowCount(list.count());
     indexToID.clear();
@@ -116,12 +116,12 @@ void TodoList::refreshItems()
     }
 
     // list
-    files = Storage::i()->getFileList(date);
+    files = Storage::file()->getFileList(date);
     fileList->clear();
     for (FileInfo fi : files)
     {
         auto *dl = new DraggableLabel(fi.fileName, this);
-        dl->filePath = Storage::i()->getFilePath(fi.id);
+        dl->filePath = Storage::file()->getFilePath(fi.id);
         dl->userData = fi.id;
         fileList->append(dl);
     }
@@ -138,7 +138,7 @@ void TodoList::add()
         {
             QMessageBox(QMessageBox::Information, tr("Note"), tr("The rule doesn't match this date, and it will show on another date.")).exec();
         }
-        Storage::i()->add(edit.item());
+        Storage::todo()->add(edit.item());
         refreshItems();
     }
 }
@@ -162,7 +162,7 @@ void TodoList::del()
 
     for (int i = indexToDelete.count() - 1; i >= 0; --i)
     {
-        Storage::i()->del(indexToDelete[i]);
+        Storage::todo()->del(indexToDelete[i]);
     }
     refreshItems();
 }
@@ -171,20 +171,20 @@ void TodoList::edit(int index)
 {
     TodoEdit edit;
     edit.setWindowTitle(tr("Edit"));
-    edit.setItem(Storage::i()->get(indexToID[index]));
+    edit.setItem(Storage::todo()->get(indexToID[index]));
     if (edit.exec())
     {
         if (!edit.item().match(date))
         {
             QMessageBox(QMessageBox::Information, tr("Note"), tr("The rule no longer matches this date, and will disappear from this window.")).exec();
         }
-        Storage::i()->set(indexToID[index], edit.item());
+        Storage::todo()->set(indexToID[index], edit.item());
         refreshItems();
     }
 }
 
 void TodoList::delFile()
 {
-    Storage::i()->delFile(fileList->selectedLabel->userData.toString());
+    Storage::file()->delFile(fileList->selectedLabel->userData.toString());
     refreshItems();
 }

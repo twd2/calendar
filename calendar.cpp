@@ -177,6 +177,7 @@ void Calendar::initCalendar()
 
 void Calendar::itemDoubleClicked(QWidget *w)
 {
+    isMousePressed = false;
     auto label = static_cast<DateItem *>(w);
     if (!label)
     {
@@ -267,7 +268,7 @@ void Calendar::setMonth(const QDate &month)
     {
         auto label = static_cast<QLabel *>(grid->itemAtPosition(y, 0)->widget());
         Q_ASSERT(label != nullptr);
-        label->setText("<font color=red><strong>" + QString::number(_month.weekNumber() + y - 1) + "</strong></font>");
+        label->setText("<font color=red><strong>" + QString::number(_month.addDays((y - 1) * 7).weekNumber()) + "</strong></font>");
     }
 
 
@@ -429,7 +430,7 @@ void Calendar::dropEvent(QDropEvent *e)
     for (const auto &url : urls)
     {
         qDebug() << url.toString();
-        Storage::i()->putFile(url.toLocalFile(), label->date());
+        Storage::file()->putFile(url.toLocalFile(), label->date());
     }
     updateTodo();
 }
@@ -442,7 +443,7 @@ void Calendar::updateTodo()
         {
             auto label = static_cast<DateItem *>(grid->itemAtPosition(y, x)->widget());
             Q_ASSERT(label != nullptr);
-            auto list = Storage::i()->get(label->date());
+            auto list = Storage::todo()->get(label->date());
             QStringList strlist;
             strlist << "<body style='margin: 0px;padding: 0px;'>";
             if (list.count() == 0)
@@ -465,7 +466,7 @@ void Calendar::updateTodo()
                     }
                 }
             }
-            auto files = Storage::i()->getFileList(label->date());
+            auto files = Storage::file()->getFileList(label->date());
             for (const FileInfo &fi : files)
             {
                 strlist << QString("<i style='margin: 0px;padding: 0px;'>%1</i>").arg(fi.fileName.toHtmlEscaped());
@@ -497,7 +498,7 @@ void Calendar::importTodo()
     if (fd.exec())
     {
         qDebug() << fd.selectedFiles()[0];
-        Storage::i()->save(fd.selectedFiles()[0]);
+        Storage::todo()->importFile(fd.selectedFiles()[0], false);
     }
 }
 
@@ -514,7 +515,7 @@ void Calendar::exportTodo()
     if (fd.exec())
     {
         qDebug() << fd.selectedFiles()[0];
-        Storage::i()->save(fd.selectedFiles()[0]);
+        Storage::todo()->exportFile(fd.selectedFiles()[0]);
     }
 }
 

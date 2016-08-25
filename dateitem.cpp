@@ -40,7 +40,12 @@ void DateItem::paintEvent(QPaintEvent *e)
     f.setPointSize(13);
     f.setBold(true);
     p.setFont(f);
-    p.drawText(rect(), Qt::AlignCenter, QString::number(_date.day()));
+    QString dayNumber = QString::number(_date.day());
+    if (_selected && _enabled)
+    {
+        dayNumber = QString("[%1]").arg(dayNumber);
+    }
+    p.drawText(rect(), Qt::AlignCenter, dayNumber);
 
     if (_selected && _enabled)
     {

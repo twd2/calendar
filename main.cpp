@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     QDesktopWidget *desktop = QApplication::desktop();
     QRect screen = desktop->screenGeometry();
 
-    Storage::i()->load();
+    Storage::todo()->load();
 
     /*Widget *w = new Widget();
     w->resize(screen.width() / 3, screen.height() / 3);
@@ -37,6 +37,6 @@ int main(int argc, char **argv)
     c.setWindowTitle(QObject::tr("Wandai's Calendar"));
     c.show(); // */
 
-    Storage::i()->save();
+    Storage::todo()->save();
     return app.exec();
 }
