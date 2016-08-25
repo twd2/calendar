@@ -51,7 +51,7 @@ QString TodoItem::matchToString() const
     }
     else
     {
-        list << Global::monthString[month - 1];
+        list << Global::monthString(month - 1);
     }
 
     if (day == -1)
@@ -65,7 +65,7 @@ QString TodoItem::matchToString() const
 
     if (dayOfWeek != -1)
     {
-        list << QObject::tr("only %1").arg(Global::dayOfWeekString[dayOfWeek - 1]);
+        list << QObject::tr("only %1").arg(Global::dayOfWeekString(dayOfWeek - 1));
     }
     return list.join(QObject::tr(", "));
 }

@@ -39,3 +39,4 @@ CMakeLists.txt.user
 # target
 *.app
 *.app/
+*.qm

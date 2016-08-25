@@ -34,3 +34,6 @@ HEADERS += \
 FORMS +=
 
 TRANSLATIONS += zh_CN.ts
+
+RESOURCES += \
+    res.qrc

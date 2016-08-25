@@ -7,10 +7,10 @@
 class Global
 {
 public:
-    static QString monthAbbr[];
-    static QString monthString[];
-    static QString dayOfWeekAbbr[];
-    static QString dayOfWeekString[];
+    static QString monthAbbr(int);
+    static QString monthString(int);
+    static QString dayOfWeekAbbr(int);
+    static QString dayOfWeekString(int);
     static QString getTextColorName(QColor backgroundColor);
     static QColor getTextColor(QColor backgroundColor);
     Global() = delete;

@@ -86,7 +86,7 @@ void Calendar::initConrtollers()
     monthBox = new QComboBox(this);
     for (int i = 0; i < 12; ++i)
     {
-        monthBox->addItem(Global::monthAbbr[i], i + 1);
+        monthBox->addItem(Global::monthAbbr(i), i + 1);
     }
     connect(monthBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMonth(int)));
     monthBox->show();
@@ -117,7 +117,7 @@ void Calendar::initCalendar()
     for (int x = 1; x <= 7; ++x)
     {
         QString c = (x == 1 || x == 7) ? "red" : "black";
-        QLabel *label = new QLabel("<font color=" + c + "><strong>" + Global::dayOfWeekAbbr[x - 1] + "</strong></font>", this);
+        QLabel *label = new QLabel("<font color=" + c + "><strong>" + Global::dayOfWeekAbbr(x - 1) + "</strong></font>", this);
         label->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
         label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
         label->show();

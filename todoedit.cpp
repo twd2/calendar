@@ -37,7 +37,7 @@ void TodoEdit::initControllers()
     monthBox->addItem(tr("any month"), -1);
     for (int i = 1; i <= 12; ++i)
     {
-        monthBox->addItem(Global::monthString[i - 1], i);
+        monthBox->addItem(Global::monthString(i - 1), i);
     }
     connect(monthBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMonthByIndex(int)));
     monthBox->show();
@@ -57,7 +57,7 @@ void TodoEdit::initControllers()
     dayOfWeekBox->addItem(tr("any day of week"), -1);
     for (int i = 1; i <= 7; ++i)
     {
-        dayOfWeekBox->addItem(Global::dayOfWeekString[i - 1], i);
+        dayOfWeekBox->addItem(Global::dayOfWeekString(i - 1), i);
     }
     connect(dayOfWeekBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setDayOfWeekByIndex(int)));
     dayOfWeekBox->show();
