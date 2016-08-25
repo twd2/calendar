@@ -13,12 +13,18 @@ TodoStorage::TodoStorage()
 
 }
 
-int TodoStorage::add(TodoItem item)
+int TodoStorage::add(const TodoItem &item)
 {
-    item.id = _items.count();
-    _items.append(item);
+    TodoItem i = item;
+    i.id = _items.count();
+    _items.append(i);
     save();
-    return item.id;
+    return i.id;
+}
+
+void TodoStorage::delAll()
+{
+    _items.clear();
 }
 
 void TodoStorage::del(int id)
@@ -105,12 +111,12 @@ void TodoStorage::importFile(const QString &fileName, bool overwrite)
     QJsonDocument doc = QJsonDocument::fromJson(file.readAll());
     if (overwrite)
     {
-        _items = fromJsonDoc(doc);
+        delAll();
     }
-    else
+    auto items = fromJsonDoc(doc);
+    for (TodoItem i : items)
     {
-        auto items = fromJsonDoc(doc);
-
+        add(i);
     }
 }
 
@@ -143,7 +149,6 @@ QJsonDocument TodoStorage::toJsonDoc(const QVector<TodoItem> &items)
 
 void TodoStorage::exportFile(const QString &fileName)
 {
-
     QFile file(fileName);
     file.open(QFile::WriteOnly);
     file.write(toJsonDoc(getAll()).toJson());
@@ -151,7 +156,7 @@ void TodoStorage::exportFile(const QString &fileName)
 
 QVector<TodoItem> TodoStorage::get(const QString &query)
 {
-
+    // TODO
 }
 
 QVector<TodoItem> TodoStorage::getAll()

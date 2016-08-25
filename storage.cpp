@@ -1,7 +1,6 @@
 #include "storage.h"
 
-TodoStorage *Storage::todoInstance = nullptr;
-FileStorage *Storage::fileInstance = nullptr;
+SQLiteStorage *Storage::sqlInstance = nullptr;
 
 Storage::Storage()
 {
@@ -10,19 +9,27 @@ Storage::Storage()
 
 TodoStorage *Storage::todo()
 {
-    if (!todoInstance)
+    if (!sqlInstance)
     {
-        todoInstance = new TodoStorage();
+        sqlInstance = new SQLiteStorage();
     }
-    return todoInstance;
+    return sqlInstance;
 }
 
 FileStorage *Storage::file()
 {
-    if (!fileInstance)
+    if (!sqlInstance)
     {
-        fileInstance = new FileStorage();
+        sqlInstance = new SQLiteStorage();
     }
-    return fileInstance;
+    return sqlInstance;
 }
 
+void Storage::end()
+{
+    if (sqlInstance)
+    {
+        delete sqlInstance;
+        sqlInstance = nullptr;
+    }
+}

@@ -3,15 +3,16 @@
 
 #include "todostorage.h"
 #include "filestorage.h"
+#include "sqlitestorage.h"
 
 class Storage
 {
 private:
-    static TodoStorage *todoInstance;
-    static FileStorage *fileInstance;
+    static SQLiteStorage *sqlInstance;
 public:
     static TodoStorage *todo();
     static FileStorage *file();
+    static void end();
     Storage();
 };
 

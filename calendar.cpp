@@ -20,6 +20,7 @@
 #include <QBitmap>
 #include <QGraphicsView>
 #include <QtGlobal>
+#include <QMessageBox>
 
 #ifdef Q_OS_WIN
 #include <Windows.h>
@@ -103,6 +104,11 @@ void Calendar::initConrtollers()
     connect(btnToday, SIGNAL(clicked(bool)), this, SLOT(setToday()));
     btnToday->show();
     controllers->addWidget(btnToday);
+
+    txtQuery = new QLineEdit(this);
+    connect(txtQuery, SIGNAL(returnPressed()), this, SLOT(search()));
+    txtQuery->show();
+    controllers->addWidget(txtQuery);
 
     controllers->addWidget(btnNext);
 }
@@ -331,7 +337,7 @@ void Calendar::mouseMoveEvent(QMouseEvent *e)
     }
     if (isMousePressed)
     {
-        this->move(lastPos + e->globalPos() - lastMousePos);
+        move(lastPos + e->globalPos() - lastMousePos);
     }
 }
 
@@ -445,7 +451,7 @@ void Calendar::updateTodo()
             Q_ASSERT(label != nullptr);
             auto list = Storage::todo()->get(label->date());
             QStringList strlist;
-            strlist << "<body style='margin: 0px;padding: 0px;'>";
+            strlist << "<body style='margin:0px;padding:0px;'>";
             if (list.count() == 0)
             {
                 label->setBackgroundColor(Qt::GlobalColor::white);
@@ -457,7 +463,7 @@ void Calendar::updateTodo()
                 {
                     int r, g, b;
                     i.color.getRgb(&r, &g, &b);
-                    strlist << QString("<p style='background-color: rgb(%1, %2, %3);color: %4;margin: 0px;padding: 0px;'>%5</p>")
+                    strlist << QString("<p style='background-color:rgb(%1, %2, %3);color:%4;margin:0px;padding:0px;'>%5</p>")
                                    .arg(r).arg(g).arg(b).arg(Global::getTextColorName(i.color))
                                    .arg(i.text.toHtmlEscaped());
                     if (i.fullMatch(label->date()))
@@ -469,7 +475,7 @@ void Calendar::updateTodo()
             auto files = Storage::file()->getFileList(label->date());
             for (const FileInfo &fi : files)
             {
-                strlist << QString("<i style='margin: 0px;padding: 0px;'>%1</i>").arg(fi.fileName.toHtmlEscaped());
+                strlist << QString("<p style='margin:0px;padding:0px;font-style:italic;'>%1</p>").arg(fi.fileName.toHtmlEscaped());
             }
             strlist << "</body>";
             label->setText(strlist.join("\n"));
@@ -500,6 +506,7 @@ void Calendar::importTodo()
         qDebug() << fd.selectedFiles()[0];
         Storage::todo()->importFile(fd.selectedFiles()[0], false);
     }
+    updateTodo();
 }
 
 void Calendar::exportTodo()
@@ -562,4 +569,19 @@ void Calendar::movableChanged()
 void Calendar::restoreClicked()
 {
     movable->setChecked(true);
+}
+
+void Calendar::search()
+{
+    QVector<TodoItem> result = Storage::todo()->get(txtQuery->text());
+    if (result.count() == 0)
+    {
+        QMessageBox(QMessageBox::Information, tr("Note"), tr("No todo found."),
+                    QMessageBox::Ok).exec();
+        return;
+    }
+    for (TodoItem &i : result)
+    {
+        qDebug() << i.text;
+    }
 }
