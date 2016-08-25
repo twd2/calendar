@@ -13,6 +13,7 @@ class Calendar : public QWidget
 {
     Q_OBJECT
 protected:
+    const qreal WINDOWOPACITY = 0.7;
     const int yearRange = 50; // -yearRange ~ +yearRange
     QVBoxLayout *mainLayout;
     QHBoxLayout *controllers;
@@ -24,6 +25,7 @@ protected:
     QPushButton *movable, *acceptDnD;
 public:
     explicit Calendar(QWidget *parent = nullptr);
+    void setWindowMouseEventTransparent(bool);
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -51,6 +53,8 @@ public slots:
     void setToday();
     void importTodo();
     void exportTodo();
+    void movableChanged();
+    void restoreClicked();
 private:
     void initConrtollers();
     void initCalendar();

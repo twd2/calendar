@@ -31,6 +31,8 @@ HEADERS += \
     draggablelabel.h \
     draggablelist.h
 
+win32:LIBS += -lkernel32 -luser32
+
 FORMS +=
 
 TRANSLATIONS += zh_CN.ts

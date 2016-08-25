@@ -1,10 +1,11 @@
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QTranslator>
-
 #include "widget.h"
 #include "storage.h"
 #include "draggablelabel.h"
+
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QTranslator>
+#include <QtGlobal>
 
 int main(int argc, char **argv)
 {
@@ -17,6 +18,11 @@ int main(int argc, char **argv)
     QTranslator qtTrans;
     qtTrans.load(":/locale/qt_zh_CN.qm");
     app.installTranslator(&qtTrans);
+#ifdef Q_OS_WIN
+    QFont font;
+    font.setFamily("Microsoft YaHei");
+    app.setFont(font);
+#endif
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect screen = desktop->screenGeometry();

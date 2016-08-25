@@ -19,16 +19,23 @@
 #include <QResizeEvent>
 #include <QBitmap>
 #include <QGraphicsView>
+#include <QtGlobal>
+
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
 
 
 Calendar::Calendar(QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
       controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
-    // setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
     // setWindowOpacity(0.7);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
+    // setAttribute(Qt::WA_TranslucentBackground, true);
+    // setWindowTransparent(true);
 
     // set background color
     QPalette pal(palette());
@@ -134,6 +141,7 @@ void Calendar::initCalendar()
     movable->setCheckable(true);
     movable->setChecked(true);
     movable->show();
+    connect(movable, SIGNAL(toggled(bool)), this, SLOT(movableChanged()));
     settingLayout->addWidget(movable);
     acceptDnD = new QPushButton(tr("DnD"), this);
     acceptDnD->setCheckable(true);
@@ -293,23 +301,7 @@ void Calendar::paintEvent(QPaintEvent *)
 
 void Calendar::resizeEvent(QResizeEvent *)
 {
-//    QPainterPath path;
-//    //QRectF rect = QRectF(0,0,200,100);
-//    path.addEllipse(rect());
-//    //path.addRoundRect(rect, 5, 5);
-//    QPolygon polygon = path.toFillPolygon().toPolygon();
-//    //获得这个路径上的所有的点
-//    QRegion region(polygon);
-//    //根据这个点构造这个区域
-//    setMask(region);
-//    QPixmap pixmap(rect().size());
-//    QPainter p(&pixmap);
-//    p.fillRect(rect(), Qt::GlobalColor::black);
-//    p.fillRect(0, 0, 100, 100, Qt::white);
-//    p.fillRect(100, 100, 100, 100, Qt::white);
-//    p.fillRect(200, 200, 100, 100, Qt::white);
-//    setMask(pixmap.createMaskFromColor(Qt::black));
-//    pixmap.save("x.png");
+
 }
 
 void Calendar::mousePressEvent(QMouseEvent *e)
@@ -369,6 +361,7 @@ void Calendar::dragEnterEvent(QDragEnterEvent *e)
     {
         e->ignore();
     }
+    // TODO: check directory
 }
 
 void Calendar::dragMoveEvent(QDragMoveEvent *e)
@@ -436,7 +429,7 @@ void Calendar::dropEvent(QDropEvent *e)
     for (const auto &url : urls)
     {
         qDebug() << url.toString();
-        Storage::i()->putFile(url.path(), label->date());
+        Storage::i()->putFile(url.toLocalFile(), label->date());
     }
     updateTodo();
 }
@@ -523,4 +516,48 @@ void Calendar::exportTodo()
         qDebug() << fd.selectedFiles()[0];
         Storage::i()->save(fd.selectedFiles()[0]);
     }
+}
+
+void Calendar::setWindowMouseEventTransparent(bool trans)
+{
+#ifdef Q_OS_WIN
+    if (trans)
+    {
+        SetWindowLong((HWND)winId(), GWL_EXSTYLE, GetWindowLong((HWND)winId(), GWL_EXSTYLE) | WS_EX_TRANSPARENT);
+    }
+    else
+    {
+        SetWindowLong((HWND)winId(), GWL_EXSTYLE, GetWindowLong((HWND)winId(), GWL_EXSTYLE) & ~WS_EX_TRANSPARENT);
+    }
+#endif
+}
+
+void Calendar::movableChanged()
+{
+#ifdef Q_OS_WIN
+    if (movable->isChecked())
+    {
+        setWindowMouseEventTransparent(false);
+        setWindowOpacity(1.0);
+    }
+    else
+    {
+        setWindowMouseEventTransparent(true);
+        setWindowOpacity(WINDOWOPACITY);
+
+        QPushButton *btnRestore = new QPushButton(tr("Movable"));
+        btnRestore->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+        btnRestore->move(pos() + movable->pos());
+        btnRestore->resize(movable->size());
+        btnRestore->setAttribute(Qt::WA_DeleteOnClose);
+        connect(btnRestore, SIGNAL(clicked(bool)), btnRestore, SLOT(close()));
+        connect(btnRestore, SIGNAL(destroyed(QObject*)), this, SLOT(restoreClicked()));
+        btnRestore->show();
+    }
+#endif
+}
+
+void Calendar::restoreClicked()
+{
+    movable->setChecked(true);
 }
