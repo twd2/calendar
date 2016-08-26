@@ -368,8 +368,25 @@ void Calendar::dragEnterEvent(QDragEnterEvent *e)
     else
     {
         e->ignore();
+        return;
     }
-    // TODO: check directory
+
+    // check file
+    const QList<QUrl> urls = mime->urls();
+    for (const auto &url : urls)
+    {
+        if (!url.isLocalFile())
+        {
+            e->ignore();
+            return;
+        }
+        QFileInfo fi(url.toLocalFile());
+        if (fi.isDir())
+        {
+            e->ignore();
+            return;
+        }
+    }
 }
 
 void Calendar::dragMoveEvent(QDragMoveEvent *e)
@@ -387,6 +404,24 @@ void Calendar::dragMoveEvent(QDragMoveEvent *e)
     else
     {
         e->ignore();
+        return;
+    }
+    // check file
+    const QList<QUrl> urls = mime->urls();
+    for (const auto &url : urls)
+    {
+        if (!url.isLocalFile())
+        {
+            e->ignore();
+            return;
+        }
+        QFileInfo fi(url.toLocalFile());
+        if (fi.isDir())
+        {
+            e->ignore();
+            return;
+        }
+        qDebug() << url.toString();
     }
     auto label = static_cast<DateItem *>(childAt(e->pos()));
     if (!label || !label->enabled())
@@ -426,13 +461,27 @@ void Calendar::dropEvent(QDropEvent *e)
         e->ignore();
         return;
     }
+    // check file
+    const QList<QUrl> urls = mime->urls();
+    for (const auto &url : urls)
+    {
+        if (!url.isLocalFile())
+        {
+            e->ignore();
+            return;
+        }
+        QFileInfo fi(url.toLocalFile());
+        if (fi.isDir())
+        {
+            e->ignore();
+            return;
+        }
+    }
     auto label = static_cast<DateItem *>(childAt(e->pos()));
     if (!label || !label->enabled())
     {
         return;
     }
-    label->setColor(Qt::GlobalColor::cyan);
-    const QList<QUrl> &urls = mime->urls();
     qDebug() << label->date() << "dropped";
     for (const auto &url : urls)
     {

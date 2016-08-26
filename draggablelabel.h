@@ -3,6 +3,8 @@
 
 #include "draggablelabel.h"
 
+#include <functional>
+
 #include <QLabel>
 #include <QWidget>
 #include <QString>
@@ -17,7 +19,7 @@ class DraggableLabel : public QLabel
 private:
     QPalette _defaultPal;
 public:
-    QString filePath;
+    std::function<QString ()> filePath;
     QVariant userData;
     DraggableLabel(const QString &text, QWidget *parent = nullptr);
     ~DraggableLabel();

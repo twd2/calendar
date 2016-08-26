@@ -44,7 +44,7 @@ void DraggableLabel::mousePressEvent(QMouseEvent *e)
     // QPoint hotSpot = e->pos(); // - pos();
 
     QList<QUrl> urls;
-    urls.append(QUrl::fromLocalFile(filePath));
+    urls.append(QUrl::fromLocalFile(filePath()));
 
     QMimeData *mimeData = new QMimeData();
     mimeData->setUrls(urls);
