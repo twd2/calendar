@@ -121,7 +121,7 @@ void TodoList::refreshItems()
     for (FileInfo fi : files)
     {
         auto *dl = new DraggableLabel(fi.fileName, this);
-        dl->filePath = Storage::file()->getFilePath(fi.id);
+        dl->filePath = [fi] () { return Storage::file()->getFilePath(fi.id); };
         dl->userData = fi.id;
         fileList->append(dl);
     }
