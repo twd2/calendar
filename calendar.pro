@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     todostorage.cpp \
     filestorage.cpp \
     sqlitestorage.cpp \
-    todotable.cpp
+    todotable.cpp \
+    searchresult.cpp
 
 HEADERS += \
     todolist.h \
@@ -37,7 +38,8 @@ HEADERS += \
     todostorage.h \
     filestorage.h \
     sqlitestorage.h \
-    todotable.h
+    todotable.h \
+    searchresult.h
 
 win32:LIBS += -lkernel32 -luser32
 

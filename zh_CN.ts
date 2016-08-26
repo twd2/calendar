@@ -4,54 +4,62 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="calendar.cpp" line="62"/>
+        <location filename="calendar.cpp" line="64"/>
         <source>&lt;&lt; Previous month</source>
         <translation>&lt;&lt; 上一月</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="66"/>
+        <location filename="calendar.cpp" line="68"/>
         <source>Next month &gt;&gt;</source>
         <translation>下一月 &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="74"/>
-        <location filename="calendar.cpp" line="495"/>
+        <location filename="calendar.cpp" line="76"/>
+        <location filename="calendar.cpp" line="502"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="79"/>
-        <location filename="calendar.cpp" line="512"/>
+        <location filename="calendar.cpp" line="81"/>
+        <location filename="calendar.cpp" line="520"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="102"/>
+        <location filename="calendar.cpp" line="104"/>
         <source>Today</source>
         <translation>今日</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="140"/>
-        <location filename="calendar.cpp" line="550"/>
+        <location filename="calendar.cpp" line="147"/>
+        <location filename="calendar.cpp" line="558"/>
         <source>Movable</source>
         <translation>可移动</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="146"/>
+        <location filename="calendar.cpp" line="153"/>
         <source>DnD</source>
         <translation>可拖放</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="492"/>
-        <location filename="calendar.cpp" line="509"/>
+        <location filename="calendar.cpp" line="499"/>
+        <location filename="calendar.cpp" line="517"/>
         <source>JSON file (*.json)</source>
         <translation>JSON 文件 (*.json)</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="493"/>
-        <location filename="calendar.cpp" line="510"/>
+        <location filename="calendar.cpp" line="500"/>
+        <location filename="calendar.cpp" line="518"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation type="vanished">注意</translation>
+    </message>
+    <message>
+        <source>No todo found.</source>
+        <translation type="vanished">待办事项未找到。</translation>
     </message>
 </context>
 <context>
@@ -430,6 +438,42 @@
     </message>
 </context>
 <context>
+    <name>SearchResult</name>
+    <message>
+        <location filename="searchresult.cpp" line="17"/>
+        <source>Delete</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="searchresult.cpp" line="22"/>
+        <source>OK</source>
+        <translation>好</translation>
+    </message>
+    <message>
+        <location filename="searchresult.cpp" line="51"/>
+        <location filename="searchresult.cpp" line="63"/>
+        <source>Confirm</source>
+        <translation>确认</translation>
+    </message>
+    <message>
+        <location filename="searchresult.cpp" line="51"/>
+        <source>Are you sure to delete the todo(s) you selected?</source>
+        <translation>您确定要删除这个（些）待办事项吗？</translation>
+    </message>
+    <message>
+        <location filename="searchresult.cpp" line="63"/>
+        <source>Todo &quot;%1&quot; on %2 matches more than one day. 
+Press &quot;Yes&quot; to delete the whole rule.</source>
+        <translation>待办事项“%1”于%2匹配了不止一天。
+按“是”来删除整个规则。</translation>
+    </message>
+    <message>
+        <location filename="searchresult.cpp" line="83"/>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+</context>
+<context>
     <name>TodoEdit</name>
     <message>
         <location filename="todoedit.cpp" line="27"/>
@@ -474,16 +518,24 @@
     </message>
     <message>
         <location filename="todoedit.cpp" line="178"/>
-        <source>Warning</source>
-        <translation>警告</translation>
+        <source>Error</source>
+        <translation>错误</translation>
     </message>
     <message>
         <location filename="todoedit.cpp" line="178"/>
-        <source>The rule cannot match any day, continue?</source>
-        <translation>这条规则不与任何日期匹配，继续？</translation>
+        <source>The rule cannot match any day.</source>
+        <translation>这条规则不与任何日期匹配。</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="192"/>
+        <source>Warning</source>
+        <translation type="vanished">警告</translation>
+    </message>
+    <message>
+        <source>The rule cannot match any day, continue?</source>
+        <translation type="vanished">这条规则不与任何日期匹配，继续？</translation>
+    </message>
+    <message>
+        <location filename="todoedit.cpp" line="189"/>
         <source>Choose color</source>
         <translation>选择颜色</translation>
     </message>
@@ -512,7 +564,7 @@
     </message>
     <message>
         <location filename="todolist.cpp" line="51"/>
-        <location filename="todolist.cpp" line="133"/>
+        <location filename="todolist.cpp" line="108"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
@@ -527,40 +579,38 @@
         <translation>好</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="78"/>
         <source>On</source>
-        <translation>于</translation>
+        <translation type="vanished">于</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="78"/>
         <source>Things</source>
-        <translation>待办事项</translation>
+        <translation type="vanished">待办事项</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="139"/>
-        <location filename="todolist.cpp" line="212"/>
+        <location filename="todolist.cpp" line="114"/>
+        <location filename="todolist.cpp" line="174"/>
         <source>Note</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="139"/>
+        <location filename="todolist.cpp" line="114"/>
         <source>The rule doesn&apos;t match this date, and it will show on another date.</source>
         <translation>这条规则不与当前日期匹配，将会在别的日期显示。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="168"/>
-        <location filename="todolist.cpp" line="180"/>
-        <location filename="todolist.cpp" line="221"/>
+        <location filename="todolist.cpp" line="130"/>
+        <location filename="todolist.cpp" line="142"/>
+        <location filename="todolist.cpp" line="183"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="168"/>
+        <location filename="todolist.cpp" line="130"/>
         <source>Are you sure to delete the todo(s) you selected?</source>
         <translation>您确定要删除这个（些）待办事项吗？</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="180"/>
+        <location filename="todolist.cpp" line="142"/>
         <source>Todo &quot;%1&quot; on %2 matches more than one day. 
 Would you like to delete the whole rule or remove this day from the rule? 
 Press &quot;Yes&quot; to delete the whole rule.</source>
@@ -569,19 +619,32 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
 按“是”来删除整个规则。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="206"/>
+        <location filename="todolist.cpp" line="168"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="212"/>
+        <location filename="todolist.cpp" line="174"/>
         <source>The rule no longer matches this date, and will disappear from this window.</source>
         <translation>这条规则不再与当前日期匹配，将会从窗口中消失。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="221"/>
+        <location filename="todolist.cpp" line="183"/>
         <source>Are you sure?</source>
         <translation>您确定吗？</translation>
+    </message>
+</context>
+<context>
+    <name>TodoTable</name>
+    <message>
+        <location filename="todotable.cpp" line="12"/>
+        <source>On</source>
+        <translation>于</translation>
+    </message>
+    <message>
+        <location filename="todotable.cpp" line="12"/>
+        <source>Todo</source>
+        <translation>待办事项</translation>
     </message>
 </context>
 </TS>

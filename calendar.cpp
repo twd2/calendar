@@ -4,6 +4,7 @@
 #include "todolist.h"
 #include "global.h"
 #include "storage.h"
+#include "searchresult.h"
 
 #include <QVector>
 #include <QLabel>
@@ -573,15 +574,8 @@ void Calendar::restoreClicked()
 
 void Calendar::search()
 {
-    QVector<TodoItem> result = Storage::todo()->get(txtQuery->text());
-    if (result.count() == 0)
-    {
-        QMessageBox(QMessageBox::Information, tr("Note"), tr("No todo found."),
-                    QMessageBox::Ok).exec();
-        return;
-    }
-    for (TodoItem &i : result)
-    {
-        qDebug() << i.text;
-    }
+    SearchResult result;
+    result.setQuery(txtQuery->text());
+    result.exec();
+    updateTodo();
 }

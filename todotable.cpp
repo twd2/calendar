@@ -9,15 +9,15 @@ TodoTable::TodoTable(QWidget *parent) : QTableWidget(0, 2, parent)
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     QStringList header;
-    header << tr("On") << tr("Things");
+    header << tr("On") << tr("Todo");
     setHorizontalHeaderLabels(header);
     connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableRowDoubleClicked(int)));
 }
 
 void TodoTable::resizeEvent(QResizeEvent *e)
 {
-    setColumnWidth(0, width() / 3); // TODO
-    setColumnWidth(1, width() * 2 / 3); // TODO
+    setColumnWidth(0, width() / 3);
+    setColumnWidth(1, width() * 2 / 3);
 }
 
 QVector<int> TodoTable::idsSelected()
