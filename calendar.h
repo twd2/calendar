@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QPushButton>
+#include <QLineEdit>
 
 class Calendar : public QWidget
 {
@@ -23,6 +24,7 @@ protected:
     QComboBox *yearBox, *monthBox;
     QDate selectedDate;
     QPushButton *movable, *acceptDnD;
+    QLineEdit *txtQuery;
 public:
     explicit Calendar(QWidget *parent = nullptr);
     void setWindowMouseEventTransparent(bool);
@@ -55,6 +57,7 @@ public slots:
     void exportTodo();
     void movableChanged();
     void restoreClicked();
+    void search();
 private:
     void initConrtollers();
     void initCalendar();

@@ -1,4 +1,4 @@
-QT += core gui widgets
+QT += core gui widgets sql
 
 TEMPLATE = app
 TARGET = calendar

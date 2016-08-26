@@ -38,5 +38,8 @@ int main(int argc, char **argv)
     c.show(); // */
 
     Storage::todo()->save();
+
+    Storage::end();
+
     return app.exec();
 }

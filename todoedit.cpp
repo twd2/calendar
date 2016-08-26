@@ -175,12 +175,9 @@ void TodoEdit::ok()
         QDate date(year, month, day);
         if (dow != date.dayOfWeek())
         {
-            if (QMessageBox(QMessageBox::Warning, tr("Warning"), tr("The rule cannot match any day, continue?"),
-                            QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
-            {
-                qDebug() << "cancelled";
-                return;
-            }
+            QMessageBox(QMessageBox::Critical, tr("Error"), tr("The rule cannot match any day."),
+                        QMessageBox::Ok).exec();
+            return;
         }
     }
     accept();
