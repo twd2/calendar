@@ -11,8 +11,9 @@
 #include <QMessageBox>
 
 TodoList::TodoList(const QDate &date, QWidget *parent) :
-    QDialog(parent), date(date),
-    mainLayout(new QVBoxLayout(this)), controllers(new QHBoxLayout()), okLayout(new QHBoxLayout())
+    QDialog(parent),
+    mainLayout(new QVBoxLayout(this)), controllers(new QHBoxLayout()), okLayout(new QHBoxLayout()),
+    date(date)
 {
     setWindowTitle(tr("Todo List on %1").arg(date.toString("yyyy-MM-dd")));
 

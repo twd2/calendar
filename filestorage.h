@@ -10,6 +10,7 @@ class FileStorage
 {
 public:
     FileStorage();
+    virtual ~FileStorage() = default;
 
     virtual FileInfo putFile(const QString &source, const QDate &date);
     virtual QVector<FileInfo> getFileList(const QDate &date);

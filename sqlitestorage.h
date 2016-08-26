@@ -28,7 +28,7 @@ public:
     static const QString sqlDeleteAll;
     QSqlDatabase db;
     SQLiteStorage();
-    ~SQLiteStorage();
+    ~SQLiteStorage() override;
 
     // TodoStorage
     int add(const TodoItem &item) override;

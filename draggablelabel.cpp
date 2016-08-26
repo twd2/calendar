@@ -39,9 +39,9 @@ void DraggableLabel::setSelected(bool selected)
 
 void DraggableLabel::mousePressEvent(QMouseEvent *e)
 {
-    qDebug() << "DraggableLabel" << e->pos();
+    qDebug() << "DraggableLabel" << e->pos() << pos();
     emit clicked(this);
-    QPoint hotSpot = e->pos() - pos();
+    // QPoint hotSpot = e->pos(); // - pos();
 
     QList<QUrl> urls;
     urls.append(QUrl::fromLocalFile(filePath));
@@ -52,7 +52,7 @@ void DraggableLabel::mousePressEvent(QMouseEvent *e)
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
     // drag->setObjectName("file");
-    drag->setHotSpot(hotSpot);
+    // drag->setHotSpot(hotSpot);
 
     qDebug() << drag->exec(Qt::CopyAction, Qt::CopyAction);
     delete drag;

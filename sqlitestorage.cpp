@@ -167,10 +167,14 @@ QVector<TodoItem> SQLiteStorage::get(const QDate &date)
 
 QVector<TodoItem> SQLiteStorage::get(const QString &query)
 {
-    QSqlQuery q(db);
-
     QString sql = sqlGetLike + " ";
     QStringList list = query.split(' ', QString::SkipEmptyParts);
+
+    if (list.count() == 0)
+    {
+        return getAll();
+    }
+
     for (int i = 0; i < list.count(); ++i)
     {
         sql += "(`Text` LIKE ?)";
@@ -182,6 +186,7 @@ QVector<TodoItem> SQLiteStorage::get(const QString &query)
     sql += ';';
     qDebug() << sql;
 
+    QSqlQuery q(db);
     if (!q.prepare(sql))
     {
         qDebug() << q.lastError().text();

@@ -157,6 +157,7 @@ void TodoStorage::exportFile(const QString &fileName)
 QVector<TodoItem> TodoStorage::get(const QString &query)
 {
     // TODO
+    throw QString("Not implemented.");
 }
 
 QVector<TodoItem> TodoStorage::getAll()

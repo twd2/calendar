@@ -19,6 +19,7 @@ public:
     static QVector<TodoItem> fromJsonDoc(const QJsonDocument &doc);
 
     TodoStorage();
+    virtual ~TodoStorage() = default;
 
     virtual int add(const TodoItem &item);
     virtual TodoItem get(int id);
