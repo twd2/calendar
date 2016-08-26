@@ -59,6 +59,11 @@
         <translation>所有文件 (*)</translation>
     </message>
     <message>
+        <location filename="calendar.cpp" line="632"/>
+        <source>Search Results</source>
+        <translation>搜索结果</translation>
+    </message>
+    <message>
         <source>Note</source>
         <translation type="vanished">注意</translation>
     </message>

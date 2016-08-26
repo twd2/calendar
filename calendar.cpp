@@ -629,6 +629,7 @@ void Calendar::search()
 {
     SearchResult result;
     result.setQuery(txtQuery->text());
+    result.setWindowTitle(tr("Search Results"));
     result.exec();
     updateTodo();
 }

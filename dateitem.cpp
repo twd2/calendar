@@ -131,5 +131,14 @@ void DateItem::setSelected(bool selected)
 void DateItem::setBackgroundColor(QColor color)
 {
     this->colorBackground = color;
-    this->_colorWeekdayText = Global::getTextColor(color);
+    if (Global::getTextColorName(color) == "black")
+    {
+        this->_colorWeekdayText = Qt::GlobalColor::black;
+        this->_colorWeekendText = Qt::GlobalColor::red;
+    }
+    else
+    {
+        this->_colorWeekdayText = Qt::GlobalColor::white;
+        this->_colorWeekendText = Qt::GlobalColor::yellow;
+    }
 }
