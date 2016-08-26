@@ -20,7 +20,7 @@ FileInfo FileStorage::putFile(const QString &source, const QDate &date)
     // TODO progress callback
     if (!dir.exists())
     {
-        QDir().mkdir(dir.dirName());
+        QDir::root().mkdir(dir.absolutePath());
     }
     qDebug() << "Copying" << file.absoluteFilePath() << "to" << fi.id;
     QFile::copy(file.absoluteFilePath(), fi.id);

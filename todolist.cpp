@@ -180,6 +180,10 @@ void TodoList::edit(int id)
 
 void TodoList::delFile()
 {
+    if (!fileList->selectedLabel)
+    {
+        return;
+    }
     if (QMessageBox(QMessageBox::Question, tr("Confirm"), tr("Are you sure?"),
                     QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
     {

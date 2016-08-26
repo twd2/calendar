@@ -11,10 +11,12 @@ class SQLiteStorage
     : public TodoStorage, public FileStorage
 {
 public:
+    static const QString tempDirName;
     static const QString databaseFilename;
     static const QString sqlInit1;
     static const QString sqlInit2;
     static const QString sqlInit3;
+    static const QString sqlInit4;
     static const QString sqlAdd;
     static const QString sqlGetByID;
     static const QString sqlGetByRowID;
@@ -26,11 +28,18 @@ public:
     static const QString sqlUpdate;
     static const QString sqlDelete;
     static const QString sqlDeleteAll;
+    static const QString sqlAddFile;
+    static const QString sqlGetFileInfoByRowID;
+    static const QString sqlGetFileInfoByID;
+    static const QString sqlGetFileInfoByDate;
+    static const QString sqlGetFileByID;
+    static const QString sqlGetFileCountByDate;
+    static const QString sqlDelFile;
     QSqlDatabase db;
     SQLiteStorage();
     ~SQLiteStorage();
 
-    // TodoStorage
+    // TodoStorage implememtation
     int add(const TodoItem &item) override;
     TodoItem get(int id) override;
     QVector<TodoItem> get(const QDate &date) override;
@@ -42,10 +51,23 @@ public:
 
     void load() override;
     void save() override;
+
+    // FileStorage implementation
+    FileInfo putFile(const QString &source, const QDate &date) override;
+    QVector<FileInfo> getFileList(const QDate &date) override;
+    int getFileCount(const QDate &date) override;
+    FileInfo getFileInfo(const QString &id);
+    QString getFilePath(const QString &id) override;
+    QByteArray getFileData(const QString &id) override;
+    void delFile(const QString &id) override;
+
+    void clearTempFiles();
 private:
     void bindTodoItem(QSqlQuery &, const TodoItem &);
     TodoItem toTodoItem(QSqlQuery &);
     QVector<TodoItem> toTodoItems(QSqlQuery &);
+    FileInfo toFileInfo(QSqlQuery &);
+    QVector<FileInfo> toFileInfos(QSqlQuery &);
 };
 
 #endif // SQLITESTORAGE_H
