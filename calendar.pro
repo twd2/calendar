@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     draggablelist.cpp \
     todostorage.cpp \
     filestorage.cpp \
-    sqlitestorage.cpp
+    sqlitestorage.cpp \
+    todotable.cpp
 
 HEADERS += \
     todolist.h \
@@ -35,7 +36,8 @@ HEADERS += \
     draggablelist.h \
     todostorage.h \
     filestorage.h \
-    sqlitestorage.h
+    sqlitestorage.h \
+    todotable.h
 
 win32:LIBS += -lkernel32 -luser32
 
