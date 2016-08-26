@@ -154,7 +154,7 @@ void TodoStorage::exportFile(const QString &fileName)
     file.write(toJsonDoc(getAll()).toJson());
 }
 
-QVector<TodoItem> TodoStorage::get(const QString &query)
+QVector<TodoItem> TodoStorage::get(const QString &)
 {
     // TODO
     throw QString("Not implemented.");

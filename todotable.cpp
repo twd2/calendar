@@ -14,7 +14,7 @@ TodoTable::TodoTable(QWidget *parent) : QTableWidget(0, 2, parent)
     connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(tableRowDoubleClicked(int)));
 }
 
-void TodoTable::resizeEvent(QResizeEvent *e)
+void TodoTable::resizeEvent(QResizeEvent *)
 {
     setColumnWidth(0, width() / 3);
     setColumnWidth(1, width() * 2 / 3);

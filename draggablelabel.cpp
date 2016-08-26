@@ -58,7 +58,7 @@ void DraggableLabel::mousePressEvent(QMouseEvent *e)
     delete drag;
 }
 
-void DraggableLabel::mouseDoubleClickEvent(QMouseEvent *e)
+void DraggableLabel::mouseDoubleClickEvent(QMouseEvent *)
 {
     // qDebug() << "double clicked" << e->pos();
     // system(QString("open %1").arg(filePath).toStdString().c_str());

@@ -1,5 +1,7 @@
 #include "global.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QObject>
 
 QString Global::getTextColorName(QColor backgroundColor)
@@ -58,4 +60,10 @@ QString Global::dayOfWeekString(int i)
                                  QObject::tr("Thursday"), QObject::tr("Friday"), QObject::tr("Saturday"),
                                  QObject::tr("Sunday")};
     return dayOfWeekString[i];
+}
+
+QRect Global::getScreen()
+{
+    QDesktopWidget *desktop = QApplication::desktop();
+    return desktop->screenGeometry();
 }

@@ -3,4 +3,7 @@
         <file>zh_CN.qm</file>
         <file>qt_zh_CN.qm</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file>icon.png</file>
+    </qresource>
 </RCC>

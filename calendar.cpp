@@ -196,9 +196,7 @@ void Calendar::itemDoubleClicked(QWidget *w)
     }
     qDebug() << label->date() << "double clicked";
     TodoList *list = new TodoList(label->date(), this);
-    QDesktopWidget *desktop = QApplication::desktop();
-    QRect screen = desktop->screenGeometry();
-    list->resize(screen.width() / 2, screen.height() / 2);
+    list->resize(Global::getScreen().width() / 2, Global::getScreen().height() / 2);
     list->exec();
     delete list;
     updateTodo();
@@ -503,21 +501,21 @@ void Calendar::updateTodo()
         {
             auto label = static_cast<DateItem *>(grid->itemAtPosition(y, x)->widget());
             Q_ASSERT(label != nullptr);
-            auto list = Storage::todo()->get(label->date());
-            QStringList strlist;
-            strlist << "<body style='margin:0px;padding:0px;'>";
-            if (list.count() == 0)
+            auto items = Storage::todo()->get(label->date());
+            QStringList html;
+            html << "<body style='margin:0px;padding:0px;'>";
+            if (items.count() == 0)
             {
                 label->setBackgroundColor(Qt::GlobalColor::white);
             }
             else
             {
                 label->setBackgroundColor(Qt::GlobalColor::white);
-                for (const TodoItem &i : list)
+                for (const TodoItem &i : items)
                 {
                     int r, g, b;
                     i.color.getRgb(&r, &g, &b);
-                    strlist << QString("<p style='background-color:rgb(%1, %2, %3);color:%4;margin:0px;padding:0px;'>%5</p>")
+                    html << QString("<p style='background-color:rgb(%1, %2, %3);color:%4;margin:0px;padding:0px;'>%5</p>")
                                    .arg(r).arg(g).arg(b).arg(Global::getTextColorName(i.color))
                                    .arg(i.text.toHtmlEscaped());
                     if (i.fullMatch(label->date()))
@@ -529,10 +527,11 @@ void Calendar::updateTodo()
             auto files = Storage::file()->getFileList(label->date());
             for (const FileInfo &fi : files)
             {
-                strlist << QString("<p>📄<span style='margin:0px;padding:0px;font-style:italic;'>%1</span></p>").arg(fi.fileName.toHtmlEscaped());
+                html << QString("<p>📄<span style='margin:0px;padding:0px;font-style:italic;color:%1;'>%2</span></p>")
+                               .arg(Global::getTextColorName(label->backgroundColor()), fi.fileName.toHtmlEscaped());
             }
-            strlist << "</body>";
-            label->setText(strlist.join("\n"));
+            html << "</body>";
+            label->setHtml(html.join("\n"));
             label->update();
         }
     }
@@ -630,6 +629,7 @@ void Calendar::search()
     SearchResult result;
     result.setQuery(txtQuery->text());
     result.setWindowTitle(tr("Search Results"));
+    result.resize(Global::getScreen().width() / 2, Global::getScreen().height() / 2);
     result.exec();
     updateTodo();
 }

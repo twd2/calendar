@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QColor>
+#include <QRect>
 
 class Global
 {
@@ -13,6 +14,7 @@ public:
     static QString dayOfWeekString(int);
     static QString getTextColorName(QColor backgroundColor);
     static QColor getTextColor(QColor backgroundColor);
+    static QRect getScreen();
     Global() = delete;
 };
 

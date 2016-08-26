@@ -10,10 +10,10 @@ DateItem::DateItem(QWidget *parent) : QWidget(parent)
 
 }
 
-void DateItem::paintEvent(QPaintEvent *e)
+void DateItem::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    p.fillRect(rect(), colorBackground);
+    p.fillRect(rect(), _colorBackground);
 
     if (_enabled)
     {
@@ -46,7 +46,7 @@ void DateItem::paintEvent(QPaintEvent *e)
     p.save();
     p.translate(0, txtRect.height());
     QTextDocument doc;
-    doc.setHtml(_text);
+    doc.setHtml(_html);
     doc.drawContents(&p);
     p.restore();
 
@@ -65,7 +65,7 @@ void DateItem::mouseReleaseEvent(QMouseEvent *e)
     e->ignore();
 }
 
-void DateItem::mouseDoubleClickEvent(QMouseEvent *e)
+void DateItem::mouseDoubleClickEvent(QMouseEvent *)
 {
     if (_enabled)
     {
@@ -79,9 +79,9 @@ void DateItem::setColor(QColor color)
     update();
 }
 
-void DateItem::setText(QString text)
+void DateItem::setHtml(QString text)
 {
-    this->_text = text;
+    this->_html = text;
     update();
 }
 
@@ -96,9 +96,9 @@ QColor DateItem::color()
     return _colorWeekdayText;
 }
 
-QString DateItem::text()
+QString DateItem::html()
 {
-    return _text;
+    return _html;
 }
 
 QDate DateItem::date()
@@ -130,7 +130,7 @@ void DateItem::setSelected(bool selected)
 
 void DateItem::setBackgroundColor(QColor color)
 {
-    this->colorBackground = color;
+    this->_colorBackground = color;
     if (Global::getTextColorName(color) == "black")
     {
         this->_colorWeekdayText = Qt::GlobalColor::black;
@@ -141,4 +141,9 @@ void DateItem::setBackgroundColor(QColor color)
         this->_colorWeekdayText = Qt::GlobalColor::white;
         this->_colorWeekendText = Qt::GlobalColor::yellow;
     }
+}
+
+QColor DateItem::backgroundColor()
+{
+    return _colorBackground;
 }

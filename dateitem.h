@@ -10,11 +10,12 @@ class DateItem : public QWidget
 public:
     explicit DateItem(QWidget *parent = 0);
     QColor color();
-    QString text();
+    QString html();
     QDate date();
     bool enabled();
     bool selected();
     void setBackgroundColor(QColor);
+    QColor backgroundColor();
 protected:
     void paintEvent(QPaintEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
@@ -24,13 +25,13 @@ signals:
     void doubleClicked();
 public slots:
     void setColor(QColor);
-    void setText(QString);
+    void setHtml(QString);
     void setDate(QDate);
     void setEnabled(bool);
     void setSelected(bool);
 private:
-    QString _text = "";
-    QColor colorBackground = Qt::GlobalColor::white;
+    QString _html = "";
+    QColor _colorBackground = Qt::GlobalColor::white;
     QColor _colorWeekdayText = Qt::GlobalColor::black;
     QColor _colorWeekendText = Qt::GlobalColor::red;
     QColor _colorDisabledText = Qt::GlobalColor::gray;
