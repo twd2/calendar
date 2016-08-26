@@ -15,13 +15,13 @@
     </message>
     <message>
         <location filename="calendar.cpp" line="76"/>
-        <location filename="calendar.cpp" line="502"/>
+        <location filename="calendar.cpp" line="555"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
         <location filename="calendar.cpp" line="81"/>
-        <location filename="calendar.cpp" line="520"/>
+        <location filename="calendar.cpp" line="573"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
@@ -31,25 +31,30 @@
         <translation>今日</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="147"/>
-        <location filename="calendar.cpp" line="558"/>
+        <location filename="calendar.cpp" line="109"/>
+        <source>Search:</source>
+        <translation>搜索：</translation>
+    </message>
+    <message>
+        <location filename="calendar.cpp" line="151"/>
+        <location filename="calendar.cpp" line="611"/>
         <source>Movable</source>
         <translation>可移动</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="153"/>
+        <location filename="calendar.cpp" line="157"/>
         <source>DnD</source>
         <translation>可拖放</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="499"/>
-        <location filename="calendar.cpp" line="517"/>
+        <location filename="calendar.cpp" line="552"/>
+        <location filename="calendar.cpp" line="570"/>
         <source>JSON file (*.json)</source>
         <translation>JSON 文件 (*.json)</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="500"/>
-        <location filename="calendar.cpp" line="518"/>
+        <location filename="calendar.cpp" line="553"/>
+        <location filename="calendar.cpp" line="571"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -543,38 +548,38 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
 <context>
     <name>TodoList</name>
     <message>
-        <location filename="todolist.cpp" line="17"/>
+        <location filename="todolist.cpp" line="18"/>
         <source>Todo List on %1</source>
         <translation>%1 待办事项</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="20"/>
+        <location filename="todolist.cpp" line="21"/>
         <source>Todo List</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="33"/>
+        <location filename="todolist.cpp" line="34"/>
         <source>Today&apos;s files</source>
         <translation>今日文件</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="43"/>
+        <location filename="todolist.cpp" line="44"/>
         <source>Delete File</source>
         <translation>删除文件</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="51"/>
-        <location filename="todolist.cpp" line="108"/>
+        <location filename="todolist.cpp" line="52"/>
+        <location filename="todolist.cpp" line="109"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="56"/>
+        <location filename="todolist.cpp" line="57"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="61"/>
+        <location filename="todolist.cpp" line="62"/>
         <source>OK</source>
         <translation>好</translation>
     </message>
@@ -587,30 +592,30 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
         <translation type="vanished">待办事项</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="114"/>
-        <location filename="todolist.cpp" line="174"/>
+        <location filename="todolist.cpp" line="115"/>
+        <location filename="todolist.cpp" line="175"/>
         <source>Note</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="114"/>
+        <location filename="todolist.cpp" line="115"/>
         <source>The rule doesn&apos;t match this date, and it will show on another date.</source>
         <translation>这条规则不与当前日期匹配，将会在别的日期显示。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="130"/>
-        <location filename="todolist.cpp" line="142"/>
-        <location filename="todolist.cpp" line="183"/>
+        <location filename="todolist.cpp" line="131"/>
+        <location filename="todolist.cpp" line="143"/>
+        <location filename="todolist.cpp" line="188"/>
         <source>Confirm</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="130"/>
+        <location filename="todolist.cpp" line="131"/>
         <source>Are you sure to delete the todo(s) you selected?</source>
         <translation>您确定要删除这个（些）待办事项吗？</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="142"/>
+        <location filename="todolist.cpp" line="143"/>
         <source>Todo &quot;%1&quot; on %2 matches more than one day. 
 Would you like to delete the whole rule or remove this day from the rule? 
 Press &quot;Yes&quot; to delete the whole rule.</source>
@@ -619,17 +624,17 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
 按“是”来删除整个规则。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="168"/>
+        <location filename="todolist.cpp" line="169"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="174"/>
+        <location filename="todolist.cpp" line="175"/>
         <source>The rule no longer matches this date, and will disappear from this window.</source>
         <translation>这条规则不再与当前日期匹配，将会从窗口中消失。</translation>
     </message>
     <message>
-        <location filename="todolist.cpp" line="183"/>
+        <location filename="todolist.cpp" line="188"/>
         <source>Are you sure?</source>
         <translation>您确定吗？</translation>
     </message>

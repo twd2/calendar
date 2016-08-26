@@ -185,7 +185,7 @@ void TodoEdit::ok()
 
 void TodoEdit::setColor()
 {
-    QColorDialog cd ;
+    QColorDialog cd;
     cd.setWindowTitle(tr("Choose color"));
     cd.setCurrentColor(_item.color);
     if (cd.exec())

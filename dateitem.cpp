@@ -30,14 +30,9 @@ void DateItem::paintEvent(QPaintEvent *e)
     {
         p.setPen(_colorDisabledText);
     }
-    QFont f;
-    //f.setPixelSize(13);
-    //p.setFont(f);
-    QTextDocument doc;
-    doc.setHtml(_text);
-    doc.drawContents(&p);
-    //p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, _text);
-    f.setPointSize(13);
+
+    QFont f = p.font();
+    // f.setPointSize(13);
     f.setBold(true);
     p.setFont(f);
     QString dayNumber = QString::number(_date.day());
@@ -45,11 +40,19 @@ void DateItem::paintEvent(QPaintEvent *e)
     {
         dayNumber = QString("[%1]").arg(dayNumber);
     }
-    p.drawText(rect(), Qt::AlignCenter, dayNumber);
+    QRect txtRect;
+    p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, dayNumber, &txtRect);
+
+    p.save();
+    p.translate(0, txtRect.height());
+    QTextDocument doc;
+    doc.setHtml(_text);
+    doc.drawContents(&p);
+    p.restore();
 
     if (_selected && _enabled)
     {
-        p.fillRect(this->rect(), QColor::fromRgba64(0, 0, 0, 16384));
+        p.fillRect(this->rect(), QColor::fromRgb(0, 0, 0, 100));
     }
 }
 

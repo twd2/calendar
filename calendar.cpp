@@ -41,7 +41,7 @@ Calendar::Calendar(QWidget *parent)
 
     // set background color
     QPalette pal(palette());
-    pal.setColor(QPalette::Background, Qt::GlobalColor::lightGray);
+    pal.setColor(QPalette::Background, QColor::fromRgb(0x5f, 0x9f, 0xd6));
     setAutoFillBackground(true);
     setPalette(pal);
 
@@ -105,6 +105,10 @@ void Calendar::initConrtollers()
     connect(btnToday, SIGNAL(clicked(bool)), this, SLOT(setToday()));
     btnToday->show();
     controllers->addWidget(btnToday);
+
+    QLabel *labQuery = new QLabel(tr("Search:"));
+    labQuery->show();
+    controllers->addWidget(labQuery);
 
     txtQuery = new QLineEdit(this);
     connect(txtQuery, SIGNAL(returnPressed()), this, SLOT(search()));
@@ -423,7 +427,7 @@ void Calendar::dragMoveEvent(QDragMoveEvent *e)
         }
         qDebug() << url.toString();
     }
-    auto label = static_cast<DateItem *>(childAt(e->pos()));
+    auto label = dynamic_cast<DateItem *>(childAt(e->pos()));
     if (!label || !label->enabled())
     {
         e->setDropAction(Qt::IgnoreAction);
@@ -477,7 +481,7 @@ void Calendar::dropEvent(QDropEvent *e)
             return;
         }
     }
-    auto label = static_cast<DateItem *>(childAt(e->pos()));
+    auto label = dynamic_cast<DateItem *>(childAt(e->pos()));
     if (!label || !label->enabled())
     {
         return;
@@ -525,7 +529,7 @@ void Calendar::updateTodo()
             auto files = Storage::file()->getFileList(label->date());
             for (const FileInfo &fi : files)
             {
-                strlist << QString("<p style='margin:0px;padding:0px;font-style:italic;'>%1</p>").arg(fi.fileName.toHtmlEscaped());
+                strlist << QString("<p>📄<span style='margin:0px;padding:0px;font-style:italic;'>%1</span></p>").arg(fi.fileName.toHtmlEscaped());
             }
             strlist << "</body>";
             label->setText(strlist.join("\n"));
