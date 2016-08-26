@@ -16,7 +16,7 @@ TodoList::TodoList(const QDate &date, QWidget *parent) :
 {
     setWindowTitle(tr("Todo List on %1").arg(date.toString("yyyy-MM-dd")));
 
-    table = new QTableWidget(0, 2, this);
+    table = new TodoTable(this);
     mainLayout->addWidget(new QLabel(tr("Todo List"), this));
     mainLayout->addWidget(table);
     mainLayout->addLayout(controllers);
@@ -70,14 +70,7 @@ void TodoList::initControllers()
     setTabOrder(btnDelete, btnOK);
     setTabOrder(btnOK, btnAdd);
 
-    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    table->setSelectionBehavior(QAbstractItemView::SelectRows);
-    table->setColumnWidth(0, 250);
-    table->setColumnWidth(1, 500);
-    QStringList header;
-    header << tr("On") << tr("Things");
-    table->setHorizontalHeaderLabels(header);
-    connect(table, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(edit(int)));
+    connect(table, SIGNAL(itemDoubleClicked(int)), this, SLOT(edit(int)));
     table->show();
 }
 
@@ -95,25 +88,7 @@ void TodoList::mousePressEvent(QMouseEvent *e)
 
 void TodoList::refreshItems()
 {
-    // table
-    auto list = Storage::todo()->get(date);
-    table->clearSelection();
-    table->setRowCount(list.count());
-    indexToID.clear();
-    for (int i = 0; i < list.count(); ++i)
-    {
-        const auto &item = list[i];
-        QTableWidgetItem *onItem = new QTableWidgetItem(item.ruleToString()),
-                         *textItem = new QTableWidgetItem(item.text);
-        onItem->setBackgroundColor(item.color);
-        onItem->setTextColor(Global::getTextColor(item.color));
-        textItem->setBackgroundColor(item.color);
-        textItem->setTextColor(Global::getTextColor(item.color));
-        table->setItem(i, 0, onItem);
-        table->setItem(i, 1, textItem);
-
-        indexToID[i] = item.id;
-    }
+    table->setTodoItems(Storage::todo()->get(date));
 
     // list
     files = Storage::file()->getFileList(date);
@@ -145,20 +120,7 @@ void TodoList::add()
 
 void TodoList::del()
 {
-    QVector<int> idToDelete;
-    for (auto &range : table->selectedRanges())
-    {
-        for (int index = range.topRow(); index <= range.bottomRow(); ++index)
-        {
-            qDebug() << index << indexToID[index];
-            if (!indexToID.contains(index))
-            {
-                qDebug() << "no index";
-                continue;
-            }
-            idToDelete.append(indexToID[index]);
-        }
-    }
+    QVector<int> idToDelete = table->idsSelected();
 
     if (idToDelete.count() == 0)
     {
@@ -200,18 +162,18 @@ void TodoList::del()
     refreshItems();
 }
 
-void TodoList::edit(int index)
+void TodoList::edit(int id)
 {
     TodoEdit edit;
     edit.setWindowTitle(tr("Edit"));
-    edit.setItem(Storage::todo()->get(indexToID[index]));
+    edit.setItem(Storage::todo()->get(id));
     if (edit.exec())
     {
         if (!edit.item().match(date))
         {
             QMessageBox(QMessageBox::Information, tr("Note"), tr("The rule no longer matches this date, and will disappear from this window.")).exec();
         }
-        Storage::todo()->set(indexToID[index], edit.item());
+        Storage::todo()->set(id, edit.item());
         refreshItems();
     }
 }
