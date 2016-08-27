@@ -51,7 +51,7 @@ const QString SQLiteStorage::sqlGetFileInfoByID =
 const QString SQLiteStorage::sqlGetFileInfoByDate =
     "SELECT `ID`, `Date`, `Name` FROM `File` WHERE `Date` = :date ORDER BY `ID` ASC;";
 const QString SQLiteStorage::sqlGetFileInfoLike =
-    "SELECT * FROM `File` WHERE";
+    "SELECT `ID`, `Date`, `Name` FROM `File` WHERE";
 const QString SQLiteStorage::sqlGetFileByID =
     "SELECT * FROM `File` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlGetFileCountByDate =
