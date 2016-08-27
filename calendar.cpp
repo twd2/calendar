@@ -28,12 +28,7 @@ Calendar::Calendar(QWidget *parent)
       controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
     setWindowFlags(Qt::FramelessWindowHint);
-    // setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
-    // setWindowOpacity(0.7);
-    // setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    // setAttribute(Qt::WA_TranslucentBackground, true);
-    // setWindowTransparent(true);
 
     // set background color
     QPalette pal(palette());
@@ -585,6 +580,7 @@ void Calendar::setWindowMouseEventTransparent(bool trans)
     {
         setWindowFlags(windowFlags() & ~Qt::WindowTransparentForInput);
     }
+    show();
 }
 
 void Calendar::movableChanged()

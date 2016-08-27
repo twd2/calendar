@@ -50,3 +50,4 @@ RESOURCES += \
 
 DISTFILES += \
     zh_CN.ts
+
