@@ -1,7 +1,7 @@
-#include "widget.h"
 #include "storage.h"
 #include "draggablelabel.h"
 #include "global.h"
+#include "calendar.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -9,6 +9,7 @@
 #include <QTranslator>
 #include <QtGlobal>
 #include <QLocale>
+#include <QIcon>
 
 int main(int argc, char **argv)
 {

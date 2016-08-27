@@ -23,11 +23,18 @@
 #include <QtGlobal>
 #include <QMessageBox>
 
-Calendar::Calendar(QWidget *parent)
+Calendar::Calendar(bool trans, QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
       controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
-    setWindowFlags(Qt::FramelessWindowHint);
+    if (!trans)
+    {
+        setWindowFlags(Qt::FramelessWindowHint);
+    }
+    else
+    {
+        setWindowFlags(Qt::FramelessWindowHint | Qt::WindowTransparentForInput);
+    }
     setAcceptDrops(true);
 
     // set background color
@@ -621,12 +628,48 @@ void Calendar::movableChanged()
         connect(btnRestore, SIGNAL(destroyed(QObject*)), this, SLOT(restoreClicked()));
         btnRestore->show();
     }
+#else
+    if (movable->isChecked())
+    {
+        setWindowMouseEventTransparent(false);
+        setWindowOpacity(1.0);
+    }
+    else
+    {
+        Calendar *newCal = new Calendar(true);
+        newCal->setAttribute(Qt::WA_DeleteOnClose, true);
+        newCal->move(pos());
+        newCal->resize(size());
+        newCal->setWindowOpacity(WINDOWOPACITY);
+        newCal->show();
+        close();
+
+        // there is a little bit tricky
+        QPushButton *btnRestore = new QPushButton(tr("Movable"));
+        btnRestore->setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
+        btnRestore->move(pos() + movable->pos());
+        btnRestore->resize(movable->size());
+        btnRestore->setAttribute(Qt::WA_DeleteOnClose);
+        connect(btnRestore, SIGNAL(clicked(bool)), btnRestore, SLOT(close()));
+        connect(btnRestore, SIGNAL(destroyed(QObject*)), newCal, SLOT(restoreClicked()));
+        btnRestore->show();
+    }
 #endif
 }
 
 void Calendar::restoreClicked()
 {
+#ifndef Q_OS_MAC
     movable->setChecked(true);
+#else
+    Calendar *newCal = new Calendar();
+    newCal->setAttribute(Qt::WA_DeleteOnClose, true);
+    newCal->move(pos());
+    newCal->resize(size());
+    newCal->setWindowOpacity(1.0);
+    newCal->show();
+    close();
+#endif
 }
 
 void Calendar::search()
