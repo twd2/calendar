@@ -29,9 +29,11 @@ public:
     static const QString sqlDelete;
     static const QString sqlDeleteAll;
     static const QString sqlAddFile;
+    static const QString sqlGetAllFileInfo;
     static const QString sqlGetFileInfoByRowID;
     static const QString sqlGetFileInfoByID;
     static const QString sqlGetFileInfoByDate;
+    static const QString sqlGetFileInfoLike;
     static const QString sqlGetFileByID;
     static const QString sqlGetFileCountByDate;
     static const QString sqlDelFile;
@@ -54,7 +56,9 @@ public:
 
     // FileStorage implementation
     FileInfo putFile(const QString &source, const QDate &date) override;
+    QVector<FileInfo> getAllFileList();
     QVector<FileInfo> getFileList(const QDate &date) override;
+    QVector<FileInfo> getFileList(const QString &query) override;
     int getFileCount(const QDate &date) override;
     FileInfo getFileInfo(const QString &id);
     QString getFilePath(const QString &id) override;

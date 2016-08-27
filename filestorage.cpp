@@ -48,6 +48,12 @@ QVector<FileInfo> FileStorage::getFileList(const QDate &date)
     return fileInfos;
 }
 
+QVector<FileInfo> FileStorage::getFileList(const QString &query)
+{
+    // TODO
+    throw QString("Not implemented.");
+}
+
 int FileStorage::getFileCount(const QDate &date)
 {
     QDir dir(date.toString("yyyyMMdd"));

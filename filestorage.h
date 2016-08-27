@@ -14,6 +14,7 @@ public:
 
     virtual FileInfo putFile(const QString &source, const QDate &date);
     virtual QVector<FileInfo> getFileList(const QDate &date);
+    virtual QVector<FileInfo> getFileList(const QString &query);
     virtual int getFileCount(const QDate &date);
     virtual QString getFilePath(const QString &id);
     virtual QByteArray getFileData(const QString &id);
