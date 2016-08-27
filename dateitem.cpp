@@ -40,6 +40,8 @@ void DateItem::paintEvent(QPaintEvent *)
     {
         dayNumber = QString("[%1]").arg(dayNumber);
     }
+    dayNumber += " " + Global::getFestival(_date);
+
     QRect txtRect;
     p.drawText(rect(), Qt::AlignTop | Qt::AlignLeft, dayNumber, &txtRect);
 

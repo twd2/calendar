@@ -45,7 +45,7 @@ signals:
 
 public slots:
     void itemDoubleClicked(QWidget *);
-    void itemSelected(QWidget *);
+    void itemClicked(QWidget *);
     void setMonth(const QDate &);
     void setMonth(int);
     void setYear(int);

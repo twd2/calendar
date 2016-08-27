@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include <QApplication>
+#include <QDate>
 #include <QDesktopWidget>
 #include <QObject>
 
@@ -66,4 +67,37 @@ QRect Global::getScreen()
 {
     QDesktopWidget *desktop = QApplication::desktop();
     return desktop->screenGeometry();
+}
+
+QString Global::getFestival(const QDate &date)
+{
+    if (date.month() == 1 && date.day() == 1)
+    {
+        return QObject::tr("New Year");
+    }
+    if (date.month() == 12 && date.day() == 24)
+    {
+        return QObject::tr("Christmas Eve");
+    }
+    if (date.month() == 12 && date.day() == 25)
+    {
+        return QObject::tr("Christmas");
+    }
+    if (date.month() == 4 && date.day() == 1)
+    {
+        return QObject::tr("April Fool's Day");
+    }
+    if (date.month() == 5 && date.day() == 1)
+    {
+        return QObject::tr("Labor Day");
+    }
+    if (date.month() == 9 && date.day() == 10)
+    {
+        return QObject::tr("Teachers' Day");
+    }
+    if (date == QDate::currentDate())
+    {
+        return QObject::tr("Today");
+    }
+    return "";
 }

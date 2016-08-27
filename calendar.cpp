@@ -170,7 +170,7 @@ void Calendar::initCalendar()
         }
     }
     connect(mapperClicked, SIGNAL(mapped(QWidget *)), this, SLOT(itemDoubleClicked(QWidget *)));
-    connect(mapperSelected, SIGNAL(mapped(QWidget *)), this, SLOT(itemSelected(QWidget *)));
+    connect(mapperSelected, SIGNAL(mapped(QWidget *)), this, SLOT(itemClicked(QWidget *)));
 
     QDate now = QDate::currentDate();
     setMonth(now);
@@ -179,6 +179,10 @@ void Calendar::initCalendar()
 
 void Calendar::itemDoubleClicked(QWidget *w)
 {
+    if (!movable->isChecked())
+    {
+        return;
+    }
     isMousePressed = false;
     auto label = static_cast<DateItem *>(w);
     if (!label)
@@ -193,9 +197,12 @@ void Calendar::itemDoubleClicked(QWidget *w)
     updateTodo();
 }
 
-void Calendar::itemSelected(QWidget *w)
+void Calendar::itemClicked(QWidget *w)
 {
-
+    if (!movable->isChecked())
+    {
+        return;
+    }
     auto label = static_cast<DateItem *>(w);
     if (!label)
     {
@@ -203,11 +210,19 @@ void Calendar::itemSelected(QWidget *w)
         return;
     }
 
-    qDebug() << label->date() << "selected";
-    setSelected(label->date());
-    if (label->date().month() != _month.month())
+    if (label->selected())
     {
-        setMonth(label->date());
+        qDebug() << label->date() << "unselected";
+        setSelected(QDate());
+    }
+    else
+    {
+        qDebug() << label->date() << "selected";
+        setSelected(label->date());
+        if (label->date().month() != _month.month())
+        {
+            setMonth(label->date());
+        }
     }
 }
 
@@ -420,12 +435,12 @@ void Calendar::dragMoveEvent(QDragMoveEvent *e)
     if (!label || !label->enabled())
     {
         e->setDropAction(Qt::IgnoreAction);
-        itemSelected(nullptr);
+        setSelected(QDate());
     }
     else
     {
         e->setDropAction(Qt::CopyAction);
-        itemSelected(label);
+        setSelected(label->date());
     }
 }
 
@@ -585,6 +600,7 @@ void Calendar::setWindowMouseEventTransparent(bool trans)
 
 void Calendar::movableChanged()
 {
+#ifndef Q_OS_MAC
     if (movable->isChecked())
     {
         setWindowMouseEventTransparent(false);
@@ -605,6 +621,7 @@ void Calendar::movableChanged()
         connect(btnRestore, SIGNAL(destroyed(QObject*)), this, SLOT(restoreClicked()));
         btnRestore->show();
     }
+#endif
 }
 
 void Calendar::restoreClicked()
