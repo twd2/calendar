@@ -45,6 +45,7 @@ void DraggableLabel::mousePressEvent(QMouseEvent *e)
 
     QList<QUrl> urls;
     urls.append(QUrl::fromLocalFile(filePath()));
+    qDebug() << QUrl::fromLocalFile(filePath());
 
     QMimeData *mimeData = new QMimeData();
     mimeData->setUrls(urls);
