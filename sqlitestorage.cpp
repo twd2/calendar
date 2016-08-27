@@ -35,19 +35,23 @@ const QString SQLiteStorage::sqlGetByDate =
 const QString SQLiteStorage::sqlGetByDateFullMatch =
     "SELECT * FROM `TodoList` WHERE `Year` = :year AND `Month` = :month AND `Day` = :day ORDER BY `ID` ASC;";
 const QString SQLiteStorage::sqlUpdate =
-    "UPDATE `TodoList` SET `Year` = :year, `Month` = :month, `Day` = :day, `DayOfWeek` = :dow, `ColorR` = :r, `ColorG` = :g, `ColorB` = :b, `Text` = :text, `Except` = :except WHERE `ID` = :id";
+    "UPDATE `TodoList` SET `Year` = :year, `Month` = :month, `Day` = :day, `DayOfWeek` = :dow, `ColorR` = :r, `ColorG` = :g, `ColorB` = :b, `Text` = :text, `Except` = :except WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlDelete =
-    "DELETE FROM `TodoList` WHERE `ID` = :id";
+    "DELETE FROM `TodoList` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlDeleteAll =
-    "DELETE FROM `TodoList`";
+    "DELETE FROM `TodoList`;";
 const QString SQLiteStorage::sqlAddFile =
     "INSERT INTO `File` (`Date`, `Name`, `Data`) VALUES (:date, :name, :data);";
+const QString SQLiteStorage::sqlGetAllFileInfo =
+    "SELECT `ID`, `Date`, `Name` FROM `File`;";
 const QString SQLiteStorage::sqlGetFileInfoByRowID =
     "SELECT `ID`, `Date`, `Name` FROM `File` WHERE `RowID` = :id;";
 const QString SQLiteStorage::sqlGetFileInfoByID =
     "SELECT `ID`, `Date`, `Name` FROM `File` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlGetFileInfoByDate =
     "SELECT `ID`, `Date`, `Name` FROM `File` WHERE `Date` = :date ORDER BY `ID` ASC;";
+const QString SQLiteStorage::sqlGetFileInfoLike =
+    "SELECT * FROM `File` WHERE";
 const QString SQLiteStorage::sqlGetFileByID =
     "SELECT * FROM `File` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlGetFileCountByDate =
@@ -437,6 +441,22 @@ FileInfo SQLiteStorage::putFile(const QString &source, const QDate &date)
     return fi;
 }
 
+QVector<FileInfo> SQLiteStorage::getAllFileList()
+{
+    QSqlQuery q(db);
+    if (!q.prepare(sqlGetAllFileInfo))
+    {
+        qDebug() << q.lastError().text();
+    }
+
+    if (!q.exec())
+    {
+        qDebug() << q.lastError().text();
+    }
+
+    return toFileInfos(q);
+}
+
 QVector<FileInfo> SQLiteStorage::getFileList(const QDate &date)
 {
     QSqlQuery q(db);
@@ -446,6 +466,46 @@ QVector<FileInfo> SQLiteStorage::getFileList(const QDate &date)
     }
 
     q.bindValue(":date", date.toString("yyyyMMdd").toInt());
+
+    if (!q.exec())
+    {
+        qDebug() << q.lastError().text();
+    }
+
+    return toFileInfos(q);
+}
+
+QVector<FileInfo> SQLiteStorage::getFileList(const QString &query)
+{
+    QString sql = sqlGetFileInfoLike + " ";
+    QStringList list = query.split(' ', QString::SkipEmptyParts);
+
+    if (list.count() == 0)
+    {
+        return getAllFileList();
+    }
+
+    for (int i = 0; i < list.count(); ++i)
+    {
+        sql += "(`Name` LIKE ?)";
+        if (i != list.count() - 1)
+        {
+            sql += " AND ";
+        }
+    }
+    sql += " ORDER BY `ID` ASC;";
+    qDebug() << sql;
+
+    QSqlQuery q(db);
+    if (!q.prepare(sql))
+    {
+        qDebug() << q.lastError().text();
+    }
+
+    for (QString &str : list)
+    {
+        q.addBindValue("%" + str + "%");
+    }
 
     if (!q.exec())
     {
@@ -497,9 +557,10 @@ int SQLiteStorage::getFileCount(const QDate &date)
 
 QString SQLiteStorage::getFilePath(const QString &id)
 {
-    // 1. get filename
+    // get filename
     FileInfo fi = getFileInfo(id);
     qDebug() << fi.id << fi.fileName;
+    // write temp file
     QDir dir(tempDirName);
     // TODO progress callback
     if (!dir.exists())

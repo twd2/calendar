@@ -19,6 +19,19 @@ SearchResult::SearchResult(QWidget *parent)
     btnDelete->show();
     mainLayout->addWidget(btnDelete);
 
+    fileListScroll = new QScrollArea(this);
+    fileListScroll->setWidgetResizable(true);
+    fileList = new DraggableList(this);
+    fileList->show();
+    fileListScroll->setWidget(fileList);
+    fileListScroll->show();
+    mainLayout->addWidget(fileListScroll);
+
+    QPushButton *btnDeleteFile = new QPushButton(tr("Delete File"), this);
+    connect(btnDeleteFile, SIGNAL(clicked(bool)), this, SLOT(delFile()));
+    btnDeleteFile->show();
+    mainLayout->addWidget(btnDeleteFile);
+
     QPushButton *btnOK = new QPushButton(tr("OK"), this);
     connect(btnOK, SIGNAL(clicked(bool)), this, SLOT(accept()));
     btnOK->setDefault(true);
@@ -31,12 +44,23 @@ SearchResult::SearchResult(QWidget *parent)
 void SearchResult::setQuery(const QString &query)
 {
     this->query = query;
-    table->setTodoItems(Storage::todo()->get(query));
+    updateResult();
 }
 
 void SearchResult::updateResult()
 {
     table->setTodoItems(Storage::todo()->get(query));
+
+    // list
+    auto files = Storage::file()->getFileList(query);
+    fileList->clear();
+    for (FileInfo fi : files)
+    {
+        auto *dl = new DraggableLabel(fi.fileName, this);
+        dl->filePath = [fi] () { return Storage::file()->getFilePath(fi.id); };
+        dl->userData = fi.id;
+        fileList->append(dl);
+    }
 }
 
 void SearchResult::del()
@@ -87,4 +111,20 @@ void SearchResult::edit(int id)
         Storage::todo()->set(id, edit.item());
         updateResult();
     }
+}
+
+void SearchResult::delFile()
+{
+    if (!fileList->selectedLabel)
+    {
+        return;
+    }
+    if (QMessageBox(QMessageBox::Question, tr("Confirm"), tr("Are you sure?"),
+                    QMessageBox::Ok | QMessageBox::Cancel).exec() != QMessageBox::Ok)
+    {
+        qDebug() << "cancelled";
+        return;
+    }
+    Storage::file()->delFile(fileList->selectedLabel->userData.toString());
+    updateResult();
 }
