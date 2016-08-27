@@ -41,8 +41,6 @@ HEADERS += \
     todotable.h \
     searchresult.h
 
-win32:LIBS += -lkernel32 -luser32
-
 FORMS +=
 
 TRANSLATIONS += zh_CN.ts

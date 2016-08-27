@@ -23,16 +23,12 @@
 #include <QtGlobal>
 #include <QMessageBox>
 
-#ifdef Q_OS_WIN
-#include <Windows.h>
-#endif
-
-
 Calendar::Calendar(QWidget *parent)
     : QWidget(parent), mainLayout(new QVBoxLayout(this)),
       controllers(new QHBoxLayout()), grid(new QGridLayout()), settingLayout(new QVBoxLayout())
 {
     setWindowFlags(Qt::FramelessWindowHint);
+    // setWindowFlags(Qt::FramelessWindowHint);
     setAcceptDrops(true);
     // setWindowOpacity(0.7);
     // setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -581,21 +577,18 @@ void Calendar::exportTodo()
 
 void Calendar::setWindowMouseEventTransparent(bool trans)
 {
-#ifdef Q_OS_WIN
     if (trans)
     {
-        SetWindowLong((HWND)winId(), GWL_EXSTYLE, GetWindowLong((HWND)winId(), GWL_EXSTYLE) | WS_EX_TRANSPARENT);
+        setWindowFlags(windowFlags() | Qt::WindowTransparentForInput);
     }
     else
     {
-        SetWindowLong((HWND)winId(), GWL_EXSTYLE, GetWindowLong((HWND)winId(), GWL_EXSTYLE) & ~WS_EX_TRANSPARENT);
+        setWindowFlags(windowFlags() & ~Qt::WindowTransparentForInput);
     }
-#endif
 }
 
 void Calendar::movableChanged()
 {
-#ifdef Q_OS_WIN
     if (movable->isChecked())
     {
         setWindowMouseEventTransparent(false);
@@ -616,7 +609,6 @@ void Calendar::movableChanged()
         connect(btnRestore, SIGNAL(destroyed(QObject*)), this, SLOT(restoreClicked()));
         btnRestore->show();
     }
-#endif
 }
 
 void Calendar::restoreClicked()
