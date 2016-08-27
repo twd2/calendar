@@ -26,7 +26,7 @@ protected:
     QPushButton *movable, *acceptDnD;
     QLineEdit *txtQuery;
 public:
-    explicit Calendar(QWidget *parent = nullptr);
+    explicit Calendar(bool trans = false, QWidget *parent = nullptr);
     void setWindowMouseEventTransparent(bool);
 
 protected:
