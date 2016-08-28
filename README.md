@@ -20,6 +20,6 @@ A simple well-designed desktop calendar for Windows, Linux and OS X.
 
 # Building
 
-1. Run `lrelease`
+1. Run `lrelease calendar.pro`
 2. Run `qmake`
 3. Run `make`
