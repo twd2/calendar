@@ -12,6 +12,12 @@ A simple well-designed desktop calendar for Windows, Linux and OS X.
 - Use SQLite database with journal to protect your data.
 - Open Source, so you can do whatever you want.
 
+![img1](https://raw.githubusercontent.com/twd2/calendar/master/img1.png)
+
+![img2](https://raw.githubusercontent.com/twd2/calendar/master/img2.png)
+
+![img3](https://raw.githubusercontent.com/twd2/calendar/master/img3.png)
+
 # Building
 
 1. Run `lrelease`
