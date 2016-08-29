@@ -13,13 +13,13 @@ const QString SQLiteStorage::databaseFilename = "cal.db3";
 const QString SQLiteStorage::sqlInit1 =
     "CREATE TABLE IF NOT EXISTS `File` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `Date` INTEGER NOT NULL, `Name` TEXT, `Data` BLOB);";
 const QString SQLiteStorage::sqlInit2 =
-    "CREATE TABLE IF NOT EXISTS `TodoList` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `Year` INTEGER NOT NULL, `Month` INTEGER NOT NULL, `Day` INTEGER NOT NULL, `DayOfWeek` INTEGER NOT NULL, `ColorR` INTEGER NOT NULL, `ColorG` INTEGER NOT NULL, `ColorB` INTEGER NOT NULL, `Text` TEXT, `Except` TEXT );";
+    "CREATE TABLE IF NOT EXISTS `TodoList` ( `ID` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `Year` INTEGER NOT NULL, `Month` INTEGER NOT NULL, `Day` INTEGER NOT NULL, `DayOfWeek` INTEGER NOT NULL, `ColorR` INTEGER NOT NULL, `ColorG` INTEGER NOT NULL, `ColorB` INTEGER NOT NULL, `Text` TEXT, `Except` TEXT, `Hour` INTEGER NOT NULL, `Minute` INTEGER NOT NULL, `Second` INTEGER NOT NULL);";
 const QString SQLiteStorage::sqlInit3 =
     "CREATE INDEX IF NOT EXISTS `date` ON `TodoList` (`Year` ASC,`Month` ASC,`Day` ASC,`DayOfWeek` ASC);";
 const QString SQLiteStorage::sqlInit4 =
     "CREATE INDEX IF NOT EXISTS `filedate` ON `File` (`Date` ASC);";
 const QString SQLiteStorage::sqlAdd =
-    "INSERT INTO `TodoList` (`Year`, `Month`, `Day`, `DayOfWeek`, `ColorR`, `ColorG`, `ColorB`, `Text`, `Except`) VALUES (:year, :month, :day, :dow, :r, :g, :b, :text, :except);";
+    "INSERT INTO `TodoList` (`Year`, `Month`, `Day`, `DayOfWeek`, `ColorR`, `ColorG`, `ColorB`, `Text`, `Except`, `Hour`, `Minute`, `Second`) VALUES (:year, :month, :day, :dow, :r, :g, :b, :text, :except, :hour, :minute, :second);";
 const QString SQLiteStorage::sqlGetByID =
     "SELECT * FROM `TodoList` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlGetByRowID =
@@ -35,7 +35,7 @@ const QString SQLiteStorage::sqlGetByDate =
 const QString SQLiteStorage::sqlGetByDateFullMatch =
     "SELECT * FROM `TodoList` WHERE `Year` = :year AND `Month` = :month AND `Day` = :day ORDER BY `ID` ASC;";
 const QString SQLiteStorage::sqlUpdate =
-    "UPDATE `TodoList` SET `Year` = :year, `Month` = :month, `Day` = :day, `DayOfWeek` = :dow, `ColorR` = :r, `ColorG` = :g, `ColorB` = :b, `Text` = :text, `Except` = :except WHERE `ID` = :id;";
+    "UPDATE `TodoList` SET `Year` = :year, `Month` = :month, `Day` = :day, `DayOfWeek` = :dow, `ColorR` = :r, `ColorG` = :g, `ColorB` = :b, `Text` = :text, `Except` = :except, `Hour` = :hour, `Minute` = :minute, `second` = :second WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlDelete =
     "DELETE FROM `TodoList` WHERE `ID` = :id;";
 const QString SQLiteStorage::sqlDeleteAll =
@@ -317,6 +317,10 @@ void SQLiteStorage::bindTodoItem(QSqlQuery &q, const TodoItem &i)
     q.bindValue(":b", b);
     q.bindValue(":text", i.text);
     q.bindValue(":except", i.except);
+
+    q.bindValue(":hour", i.hour);
+    q.bindValue(":minute", i.minute);
+    q.bindValue(":second", i.second);
 }
 
 TodoItem SQLiteStorage::toTodoItem(QSqlQuery &q)
@@ -338,6 +342,10 @@ TodoItem SQLiteStorage::toTodoItem(QSqlQuery &q)
 
         i.text = q.value("Text").toString();
         i.except = q.value("Except").toString();
+
+        i.hour = q.value("Hour").toInt();
+        i.minute = q.value("Minute").toInt();
+        i.second = q.value("Second").toInt();
         return i;
     }
     else
@@ -366,6 +374,10 @@ QVector<TodoItem> SQLiteStorage::toTodoItems(QSqlQuery &q)
 
         i.text = q.value("Text").toString();
         i.except = q.value("Except").toString();
+
+        i.hour = q.value("Hour").toInt();
+        i.minute = q.value("Minute").toInt();
+        i.second = q.value("Second").toInt();
         items.append(i);
     }
     return items;

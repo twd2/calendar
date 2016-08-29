@@ -17,10 +17,11 @@ class TodoEdit : public QDialog
 protected:
     TodoItem _item;
     QVBoxLayout *mainLayout;
-    QHBoxLayout *boxLayout;
+    QHBoxLayout *boxLayout, *timeLayout;
     QHBoxLayout *textboxLayout;
     QHBoxLayout *okLayout;
     QComboBox *yearBox, *monthBox, *dayBox, *dayOfWeekBox;
+    QComboBox *hourBox, *minuteBox, *secondBox;
     QLabel *labText;
     QPushButton *btnColor;
     QLineEdit *text;
@@ -39,6 +40,9 @@ public slots:
     void setMonth(int);
     void setDay(int);
     void setDayOfWeek(int);
+    void setHour(int);
+    void setMinute(int);
+    void setSecond(int);
     void setItem(TodoItem);
     void ok();
     void setColor();

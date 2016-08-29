@@ -10,9 +10,10 @@
 
 TodoEdit::TodoEdit(QWidget *parent)
     : QDialog(parent), mainLayout(new QVBoxLayout(this)), boxLayout(new QHBoxLayout()),
-      textboxLayout(new QHBoxLayout()), okLayout(new QHBoxLayout())
+      timeLayout(new QHBoxLayout()), textboxLayout(new QHBoxLayout()), okLayout(new QHBoxLayout())
 {
     mainLayout->addLayout(boxLayout);
+    mainLayout->addLayout(timeLayout);
     mainLayout->addLayout(textboxLayout);
     mainLayout->addLayout(okLayout);
     setLayout(mainLayout);
@@ -92,6 +93,38 @@ void TodoEdit::initControllers()
     btnOK->show();
     okLayout->addWidget(btnOK);
     okLayout->setAlignment(Qt::AlignRight);
+
+    timeLayout->addWidget(new QLabel(tr("Time:")));
+    hourBox = new QComboBox(this);
+    for (int i = 0; i < 24; ++i)
+    {
+        hourBox->addItem(QString::number(i), i);
+    }
+    hourBox->show();
+    connect(hourBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setHour(int)));
+    timeLayout->addWidget(hourBox);
+    QLabel *dot1 = new QLabel(":", this);
+    dot1->setAlignment(Qt::AlignCenter);
+    timeLayout->addWidget(dot1);
+    minuteBox = new QComboBox(this);
+    for (int i = 0; i < 60; ++i)
+    {
+        minuteBox->addItem(QString::number(i), i);
+    }
+    minuteBox->show();
+    connect(minuteBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setMinute(int)));
+    timeLayout->addWidget(minuteBox);
+    QLabel *dot2 = new QLabel(":", this);
+    dot2->setAlignment(Qt::AlignCenter);
+    timeLayout->addWidget(dot2);
+    secondBox = new QComboBox(this);
+    for (int i = 0; i < 60; ++i)
+    {
+        secondBox->addItem(QString::number(i), i);
+    }
+    secondBox->show();
+    connect(secondBox, SIGNAL(currentIndexChanged(int)), this, SLOT(setSecond(int)));
+    timeLayout->addWidget(secondBox);
 }
 
 void TodoEdit::setYearByIndex(int index)
@@ -129,6 +162,21 @@ void TodoEdit::setMonth(int month)
 void TodoEdit::setDay(int day)
 {
     _item.day = day;
+}
+
+void TodoEdit::setHour(int index)
+{
+    _item.hour = index;
+}
+
+void TodoEdit::setMinute(int index)
+{
+    _item.minute = index;
+}
+
+void TodoEdit::setSecond(int index)
+{
+    _item.second = index;
 }
 
 void TodoEdit::setDayOfWeek(int dow)
@@ -235,6 +283,10 @@ void TodoEdit::setItem(TodoItem item)
     {
         dayOfWeekBox->setCurrentIndex(0);
     }
+
+    hourBox->setCurrentIndex(_item.hour);
+    minuteBox->setCurrentIndex(_item.minute);
+    secondBox->setCurrentIndex(_item.second);
 
     updateDays();
     updateColor();

@@ -4,64 +4,79 @@
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="calendar.cpp" line="55"/>
+        <location filename="calendar.cpp" line="68"/>
         <source>&lt;&lt; Previous month</source>
         <translation>&lt;&lt; 上一月</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="59"/>
+        <location filename="calendar.cpp" line="72"/>
         <source>Next month &gt;&gt;</source>
         <translation>下一月 &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="67"/>
-        <location filename="calendar.cpp" line="560"/>
+        <location filename="calendar.cpp" line="80"/>
+        <location filename="calendar.cpp" line="573"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="72"/>
-        <location filename="calendar.cpp" line="578"/>
+        <location filename="calendar.cpp" line="85"/>
+        <location filename="calendar.cpp" line="591"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="95"/>
+        <location filename="calendar.cpp" line="108"/>
         <source>Today</source>
         <translation>今日</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="100"/>
+        <location filename="calendar.cpp" line="113"/>
         <source>Search:</source>
         <translation>搜索：</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="142"/>
-        <location filename="calendar.cpp" line="615"/>
+        <location filename="calendar.cpp" line="155"/>
+        <location filename="calendar.cpp" line="628"/>
+        <location filename="calendar.cpp" line="654"/>
         <source>Movable</source>
         <translation>可移动</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="148"/>
+        <location filename="calendar.cpp" line="161"/>
         <source>DnD</source>
         <translation>可拖放</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="557"/>
-        <location filename="calendar.cpp" line="575"/>
+        <location filename="calendar.cpp" line="570"/>
+        <location filename="calendar.cpp" line="588"/>
         <source>JSON file (*.json)</source>
         <translation>JSON 文件 (*.json)</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="558"/>
-        <location filename="calendar.cpp" line="576"/>
+        <location filename="calendar.cpp" line="571"/>
+        <location filename="calendar.cpp" line="589"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="calendar.cpp" line="636"/>
+        <location filename="calendar.cpp" line="685"/>
         <source>Search Results</source>
         <translation>搜索结果</translation>
+    </message>
+    <message>
+        <location filename="calendar.cpp" line="700"/>
+        <source>Info</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <location filename="calendar.cpp" line="700"/>
+        <source>Please do &quot;%1&quot; on %2.</source>
+        <translation>请做“%1”于%2。</translation>
+    </message>
+    <message>
+        <source>Please do &quot;%1&quot;.</source>
+        <translation type="vanished">请做“%1”。</translation>
     </message>
     <message>
         <source>Note</source>
@@ -447,37 +462,42 @@
         <translation>今日</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="39"/>
+        <location filename="main.cpp" line="40"/>
         <source>Wandai&apos;s Calendar</source>
         <translation>Wandai 日历</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="47"/>
+        <location filename="todoitem.cpp" line="51"/>
         <source>any year</source>
         <translation>任意年</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="51"/>
+        <location filename="todoitem.cpp" line="55"/>
         <source>year %1</source>
         <translation>%1年</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="56"/>
+        <location filename="todoitem.cpp" line="60"/>
         <source>any month</source>
         <translation>任意月</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="65"/>
+        <location filename="todoitem.cpp" line="69"/>
         <source>any day</source>
         <translation>任意天</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="74"/>
+        <location filename="todoitem.cpp" line="78"/>
         <source>only %1</source>
         <translation>只在%1</translation>
     </message>
     <message>
-        <location filename="todoitem.cpp" line="76"/>
+        <location filename="todoitem.cpp" line="80"/>
+        <source>at %1</source>
+        <translation>在%1</translation>
+    </message>
+    <message>
+        <location filename="todoitem.cpp" line="81"/>
         <source>, </source>
         <translation>，</translation>
     </message>
@@ -532,53 +552,58 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
 <context>
     <name>TodoEdit</name>
     <message>
-        <location filename="todoedit.cpp" line="27"/>
+        <location filename="todoedit.cpp" line="28"/>
         <source>any year</source>
         <translation>任意年</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="37"/>
+        <location filename="todoedit.cpp" line="38"/>
         <source>any month</source>
         <translation>任意月</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="47"/>
-        <location filename="todoedit.cpp" line="153"/>
+        <location filename="todoedit.cpp" line="48"/>
+        <location filename="todoedit.cpp" line="197"/>
         <source>any day</source>
         <translation>任意天</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="57"/>
+        <location filename="todoedit.cpp" line="58"/>
         <source>any day of week</source>
         <translation>无论星期几</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="66"/>
+        <location filename="todoedit.cpp" line="67"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="73"/>
+        <location filename="todoedit.cpp" line="74"/>
         <source>Things To Do:</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="82"/>
+        <location filename="todoedit.cpp" line="83"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="88"/>
+        <location filename="todoedit.cpp" line="89"/>
         <source>OK</source>
         <translation>好</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="178"/>
+        <location filename="todoedit.cpp" line="97"/>
+        <source>Time:</source>
+        <translation>时间：</translation>
+    </message>
+    <message>
+        <location filename="todoedit.cpp" line="222"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="178"/>
+        <location filename="todoedit.cpp" line="222"/>
         <source>The rule cannot match any day.</source>
         <translation>这条规则不与任何日期匹配。</translation>
     </message>
@@ -591,7 +616,7 @@ Press &quot;Yes&quot; to delete the whole rule.</source>
         <translation type="vanished">这条规则不与任何日期匹配，继续？</translation>
     </message>
     <message>
-        <location filename="todoedit.cpp" line="189"/>
+        <location filename="todoedit.cpp" line="233"/>
         <source>Choose color</source>
         <translation>选择颜色</translation>
     </message>

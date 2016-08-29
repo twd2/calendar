@@ -3,13 +3,17 @@
 
 #include <QStringList>
 #include <QDate>
+#include <QTime>
 
 TodoItem::TodoItem(const QDate &date)
     : year(date.year()),
       month(date.month()),
       day(date.day())
 {
-
+    QTime t = QTime::currentTime();
+    hour = t.hour();
+    minute = t.minute();
+    second = t.second();
 }
 
 TodoItem::TodoItem()
@@ -73,6 +77,7 @@ QString TodoItem::ruleToString() const
     {
         list << QObject::tr("only %1").arg(Global::dayOfWeekString(dayOfWeek - 1));
     }
+    list << QObject::tr("at %1").arg(QTime(hour, minute, second).toString("hh:mm:ss"));
     return list.join(QObject::tr(", "));
 }
 

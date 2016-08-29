@@ -9,6 +9,7 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QLabel>
 
 class Calendar : public QWidget
 {
@@ -25,6 +26,7 @@ protected:
     QDate selectedDate;
     QPushButton *movable, *acceptDnD;
     QLineEdit *txtQuery;
+    QLabel *labTime;
 public:
     explicit Calendar(bool trans = false, QWidget *parent = nullptr);
     void setWindowMouseEventTransparent(bool);
@@ -39,6 +41,8 @@ protected:
     void dragEnterEvent(QDragEnterEvent *) override;
     void dragMoveEvent(QDragMoveEvent *) override;
     void dropEvent(QDropEvent *) override;
+
+    void timerEvent(QTimerEvent *) override;
 
     // void resizeEvent(QResizeEvent *) override;
 signals:

@@ -48,12 +48,18 @@ Calendar::Calendar(bool trans, QWidget *parent)
     grid->setSpacing(1);
     grid->setMargin(0);
     mainLayout->addLayout(controllers);
+    labTime = new QLabel(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"), this);
+    labTime->setAlignment(Qt::AlignCenter);
+    labTime->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    labTime->show();
+    mainLayout->addWidget(labTime);
     mainLayout->addLayout(grid);
     mainLayout->setSpacing(1);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
     initConrtollers();
     initCalendar();
+    startTimer(1000);
 }
 
 void Calendar::initConrtollers()
@@ -680,4 +686,18 @@ void Calendar::search()
     result.resize(Global::getScreen().width() / 2, Global::getScreen().height() / 2);
     result.exec();
     updateTodo();
+}
+
+void Calendar::timerEvent(QTimerEvent *e)
+{
+    QDateTime dt = QDateTime::currentDateTime();
+    labTime->setText(dt.toString("yyyy-MM-dd hh:mm:ss"));
+    auto list = Storage::todo()->get(QDate::currentDate());
+    for (TodoItem &i : list)
+    {
+        if (i.hour == dt.time().hour() && i.minute == dt.time().minute() && i.second == dt.time().second())
+        {
+            QMessageBox::information(this, tr("Info"), tr("Please do \"%1\" on %2.").arg(i.text, i.ruleToString()));
+        }
+    }
 }
