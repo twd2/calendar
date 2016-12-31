@@ -23,3 +23,7 @@ A simple well-designed desktop calendar for Windows, Linux and OS X.
 1. Run `lrelease calendar.pro`
 2. Run `qmake`
 3. Run `make`
+
+## or
+
+Just open `calendar.pro` with Qt Creator.
